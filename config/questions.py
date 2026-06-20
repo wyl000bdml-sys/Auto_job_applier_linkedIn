@@ -163,3 +163,8 @@ Gratefully yours 🙏🏻,
 Sai Vignesh Golla
 '''
 ############################################################################################################
+try:
+    from modules.user_profile import apply_section
+    apply_section(globals(), "questions")
+except Exception:
+    pass

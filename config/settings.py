@@ -85,6 +85,10 @@ keep_screen_awake = True            # True or False, Note: True or False are cas
 # Run in undetected mode to bypass anti-bot protections (Preview Feature, UNSTABLE. Recommended to leave it as False)
 stealth_mode = True                # True or False, Note: True or False are case-sensitive
 
+# Browser Automation Engine
+# Choose between "selenium" or "playwright"
+browser_engine = "selenium"        # "selenium" is default, "playwright" for stealth mode
+
 # Do you want to get alerts on errors related to AI API connection?
 showAiErrorAlerts = False            # True or False, Note: True or False are case-sensitive
 
@@ -117,3 +121,8 @@ Gratefully yours 🙏🏻,
 Sai Vignesh Golla
 '''
 ############################################################################################################
+try:
+    from modules.user_profile import apply_section
+    apply_section(globals(), "settings")
+except Exception:
+    pass

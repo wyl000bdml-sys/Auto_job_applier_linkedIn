@@ -19,47 +19,72 @@ version:    26.01.20.5.08
 
 # These Sentences are Searched in LinkedIn
 # Enter your search terms inside '[ ]' with quotes ' "searching title" ' for each search followed by comma ', ' Eg: ["Software Engineer", "Software Developer", "Selenium Developer"]
-search_terms = ["Software Engineer", "Software Developer", "Python Developer", "Selenium Developer", "React Developer", "Java Developer", "Front End Developer", "Full Stack Developer", "Web Developer", "Nodejs Developer"]
+search_terms = [
+    # Scientific ML / materials AI
+    "Scientific Machine Learning",
+    "Physics Informed Machine Learning",
+    "Materials Informatics Scientist",
+    "Computational Materials Scientist",
+    "Machine Learning Scientist Materials",
+    "Surrogate Modeling Engineer",
+    "Simulation Machine Learning Engineer",
+    "CAE Machine Learning Engineer",
+    "Computational Mechanics Engineer",
+    "Digital Twin Modeling Engineer",
+
+    # Battery / thermal / reliability
+    "Battery Thermal Modeling Engineer",
+    "Battery Modeling Engineer",
+    "Battery Reliability Engineer",
+    "Battery Data Scientist",
+    "Thermal Systems Simulation Engineer",
+    "Energy Storage Machine Learning",
+
+    # Manufacturing / industrial AI
+    "Manufacturing Machine Learning Engineer",
+    "Industrial AI Engineer",
+    "Smart Manufacturing Data Scientist",
+    "Process Quality Data Scientist",
+    "Sensor Fusion Machine Learning Engineer",
+    "Predictive Maintenance Machine Learning",
+
+    # Corrosion / materials characterization
+    "Materials Modeling Engineer",
+    "Corrosion Modeling Engineer",
+    "Degradation Modeling Engineer",
+    "Reliability Modeling Engineer",
+    "Materials Characterization Scientist",
+    "Microscopy Data Scientist",
+
+    # Secondary computer vision route
+    "Computer Vision Engineer Manufacturing",
+    "Computer Vision Engineer Materials",
+    "Perception Machine Learning Engineer",
+    "Imaging Machine Learning Scientist",
+]
 
 # Search location, this will be filled in "City, state, or zip code" search box. If left empty as "", tool will not fill it.
 search_location = "United States"               # Some valid examples: "", "United States", "India", "Chicago, Illinois, United States", "90001, Los Angeles, California, United States", "Bengaluru, Karnataka, India", etc.
 
 # After how many number of applications in current search should the bot switch to next search? 
-switch_number = 30                 # Only numbers greater than 0... Don't put in quotes
+switch_number = 20                 # Only numbers greater than 0... Don't put in quotes
 
 # Do you want to randomize the search order for search_terms?
 randomize_search_order = False     # True of False, Note: True or False are case-sensitive
 
 
 # >>>>>>>>>>> Job Search Filters <<<<<<<<<<<
-''' 
-You could set your preferences or leave them as empty to not select options except for 'True or False' options. Below are some valid examples for leaving them empty:
-This is below format: QUESTION = VALID_ANSWER
-
-## Examples of how to leave them empty. Note that True or False options cannot be left empty! 
-* question_1 = ""                    # answer1, answer2, answer3, etc.
-* question_2 = []                    # (multiple select)
-* question_3 = []                    # (dynamic multiple select)
-
-## Some valid examples of how to answer questions:
-* question_1 = "answer1"                  # "answer1", "answer2", "answer3" or ("" to not select). Answers are case sensitive.
-* question_2 = ["answer1", "answer2"]     # (multiple select) "answer1", "answer2", "answer3" or ([] to not select). Note that answers must be in [] and are case sensitive.
-* question_3 = ["answer1", "Random AnswER"]     # (dynamic multiple select) "answer1", "answer2", "answer3" or ([] to not select). Note that answers must be in [] and need not match the available options.
-
-'''
-
-sort_by = ""                       # "Most recent", "Most relevant" or ("" to not select) 
+sort_by = "Most recent"                       # "Most recent", "Most relevant" or ("" to not select) 
 date_posted = "Past week"         # "Any time", "Past month", "Past week", "Past 24 hours" or ("" to not select)
 salary = ""                        # "$40,000+", "$60,000+", "$80,000+", "$100,000+", "$120,000+", "$140,000+", "$160,000+", "$180,000+", "$200,000+"
 
 easy_apply_only = True             # True or False, Note: True or False are case-sensitive
 
-experience_level = []              # (multiple select) "Internship", "Entry level", "Associate", "Mid-Senior level", "Director", "Executive"
-job_type = []                      # (multiple select) "Full-time", "Part-time", "Contract", "Temporary", "Volunteer", "Internship", "Other"
-on_site = []                       # (multiple select) "On-site", "Remote", "Hybrid"
+experience_level = ["Entry level", "Associate", "Mid-Senior level"]              # (multiple select) "Internship", "Entry level", "Associate", "Mid-Senior level", "Director", "Executive"
+job_type = ["Full-time"]                      # (multiple select) "Full-time", "Part-time", "Contract", "Temporary", "Volunteer", "Internship", "Other"
+on_site = ["On-site", "Remote", "Hybrid"]                       # (multiple select) "On-site", "Remote", "Hybrid"
 
-companies = []                     # (dynamic multiple select) make sure the name you type in list exactly matches with the company name you're looking for, including capitals. 
-                                   # Eg: "7-eleven", "Google","X, the moonshot factory","YouTube","CapitalG","Adometry (acquired by Google)","Meta","Apple","Byte Dance","Netflix", "Snowflake","Mineral.ai","Microsoft","JP Morgan","Barclays","Visa","American Express", "Snap Inc", "JPMorgan Chase & Co.", "Tata Consultancy Services", "Recruiting from Scratch", "Epic", and so on...
+companies = []                     # (dynamic multiple select) 
 location = []                      # (dynamic multiple select)
 industry = []                      # (dynamic multiple select)
 job_function = []                  # (dynamic multiple select)
@@ -85,13 +110,35 @@ pause_after_filters = True         # True or False, Note: True or False are case
 ## >>>>>>>>>>> SKIP IRRELEVANT JOBS <<<<<<<<<<<
  
 # Avoid applying to these companies, and companies with these bad words in their 'About Company' section...
-about_company_bad_words = ["Crossover"]       # (dynamic multiple search) or leave empty as []. Ex: ["Staffing", "Recruiting", "Name of Company you don't want to apply to"]
+about_company_bad_words = ["Crossover", "Staffing", "Recruiting"]       # (dynamic multiple search) or leave empty as []. Ex: ["Staffing", "Recruiting", "Name of Company you don't want to apply to"]
 
 # Skip checking for `about_company_bad_words` for these companies if they have these good words in their 'About Company' section... [Exceptions, For example, I want to apply to "Robert Half" although it's a staffing company]
 about_company_good_words = []      # (dynamic multiple search) or leave empty as []. Ex: ["Robert Half", "Dice"]
 
 # Avoid applying to these companies if they have these bad words in their 'Job Description' section...  (In development)
-bad_words = ["US Citizen","USA Citizen","No C2C", "No Corp2Corp", ".NET", "Embedded Programming", "PHP", "Ruby", "CNC"]                     # (dynamic multiple search) or leave empty as []. Case Insensitive. Ex: ["word_1", "phrase 1", "word word", "polygraph", "US Citizenship", "Security Clearance"]
+bad_words = [
+    "US Citizen",
+    "USA Citizen",
+    "U.S. Citizen",
+    "US Citizenship",
+    "U.S. Citizenship",
+    "Security Clearance",
+    "Active Clearance",
+    "Top Secret",
+    "No C2C",
+    "No Corp2Corp",
+    ".NET",
+    "PHP",
+    "Ruby",
+    "CNC",
+    "Frontend",
+    "Front End",
+    "React Developer",
+    "Node.js Developer",
+    "Web Developer",
+    "Sales",
+    "Recruiter",
+]
 
 # Do you have an active Security Clearance? (True for Yes and False for No)
 security_clearance = False         # True or False, Note: True or False are case-sensitive
@@ -109,6 +156,11 @@ current_experience = 5             # Integers > -2 (Ex: -1, 0, 1, 2, 3, 4...)
 
 
 ############################################################################################################
+try:
+    from modules.user_profile import apply_section
+    apply_section(globals(), "search")
+except Exception:
+    pass
 '''
 THANK YOU for using my tool 😊! Wishing you the best in your job hunt 🙌🏻!
 
