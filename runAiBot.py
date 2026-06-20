@@ -49,6 +49,8 @@ if login_mode == "credentials":
     password = os.environ.get("JOB_AGENT_LINKEDIN_PASSWORD", password)
 if os.environ.get("JOB_AGENT_DISABLE_AI") == "1":
     use_AI = False
+elif use_AI_resume_tailoring:
+    use_AI = True
 
 from modules.open_chrome import *
 from modules.helpers import *

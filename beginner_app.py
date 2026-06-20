@@ -199,9 +199,11 @@ def start_bot():
         if _bot_running():
             return jsonify({"error": "The assistant is already running."}), 409
 
+        profile = load_profile()
+        use_AI_tailor = profile.get("settings", {}).get("use_AI_resume_tailoring", False)
         env = os.environ.copy()
         env["JOB_AGENT_LOGIN_MODE"] = login_mode
-        env["JOB_AGENT_DISABLE_AI"] = "1"
+        env["JOB_AGENT_DISABLE_AI"] = "0" if use_AI_tailor else "1"
         if login_mode == "credentials":
             env["JOB_AGENT_LINKEDIN_USERNAME"] = username
             env["JOB_AGENT_LINKEDIN_PASSWORD"] = password
