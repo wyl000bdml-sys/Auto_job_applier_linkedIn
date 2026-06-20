@@ -99,6 +99,8 @@ DEFAULT_PROFILE: dict[str, Any] = {
         "stealth_mode": True,
         "browser_engine": "selenium",
         "showAiErrorAlerts": False,
+        "use_AI_resume_tailoring": False,
+        "shortlist_only": False,
     },
 }
 

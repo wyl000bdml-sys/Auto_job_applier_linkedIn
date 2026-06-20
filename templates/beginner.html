@@ -184,7 +184,19 @@
   </section>
 
   <section class="card">
-    <h2>4. 安全检查</h2>
+    <h2>4. 简历定制与投递选项</h2>
+    <div class="check">
+      <input type="checkbox" id="use_AI_resume_tailoring" style="width: auto;">
+      <label for="use_AI_resume_tailoring" style="display: inline; margin-bottom: 0; font-weight: normal;">启用一公司一简历 (AI 简历动态定制，需准备 <code>user_data/resume/resume.docx</code>)</label>
+    </div>
+    <div style="margin-top: 10px;" class="check">
+      <input type="checkbox" id="shortlist_only" style="width: auto;">
+      <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;">仅做收录不投递 (Shortlist 模式，生成定制简历并记录到 Excel，不点击申请)</label>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>5. 安全检查</h2>
     <div id="checks">正在检查……</div>
     <div class="safety">
       <strong>固定安全规则</strong>
@@ -193,7 +205,7 @@
   </section>
 
   <section class="card">
-    <h2>5. 登录并运行</h2>
+    <h2>6. 登录并运行</h2>
     <label for="login_mode">LinkedIn 登录方式</label>
     <select id="login_mode" onchange="toggleCredentials()">
       <option value="manual">在打开的浏览器中手动登录（推荐，不保存密码）</option>
@@ -223,7 +235,7 @@
   async function loadProfile() {
     const response = await fetch('/api/profile');
     const p = await response.json();
-    const a = p.personal, q = p.questions, s = p.search;
+    const a = p.personal, q = p.questions, s = p.search, set = p.settings || {};
     ['first_name','last_name','phone_number','current_city','state','zipcode','country']
       .forEach(k => document.getElementById(k).value = a[k] ?? '');
     document.getElementById('years_of_experience').value = q.years_of_experience ?? '0';
@@ -240,6 +252,8 @@
     [...document.getElementById('experience_level').options].forEach(o => o.selected = (s.experience_level ?? []).includes(o.value));
     [...document.getElementById('job_type').options].forEach(o => o.selected = (s.job_type ?? []).includes(o.value));
     document.getElementById('did_masters').value = s.did_masters ? 'true' : 'false';
+    document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
+    document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
     refreshChecks();
   }
 
@@ -262,6 +276,10 @@
         search_location: value('search_location'), date_posted: value('date_posted'),
         experience_level: selected('experience_level'), job_type: selected('job_type'),
         did_masters: value('did_masters') === 'true'
+      },
+      settings: {
+        use_AI_resume_tailoring: document.getElementById('use_AI_resume_tailoring').checked,
+        shortlist_only: document.getElementById('shortlist_only').checked
       }
     };
   }
