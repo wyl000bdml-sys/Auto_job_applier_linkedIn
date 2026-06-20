@@ -249,10 +249,6 @@
       <input type="checkbox" id="shortlist_only" style="width: auto;">
       <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;" id="lbl_shortlist"><strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）</label>
     </div>
-    <div style="margin-top: 12px;" class="check">
-      <input type="checkbox" id="auto_submit" style="width: auto;">
-      <label for="auto_submit" style="display: inline; margin-bottom: 0; font-weight: normal;" id="lbl_auto_submit"><strong>一键全自动投递 (无感投递模式)</strong>：全自动确认信息并提交申请，中途【不暂停】。如果不勾选此项，投递最后一步会弹窗暂停，方便你人工核对后手动点击提交。</label>
-    </div>
   </section>
 
   <section class="card">
@@ -330,7 +326,6 @@
       sec4_desc: "（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）",
       lbl_use_AI: "<strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）",
       lbl_shortlist: "<strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）",
-      lbl_auto_submit: "<strong>一键全自动投递 (无感投递模式)</strong>：全自动确认信息并提交申请，中途【不暂停】。如果不勾选此项，投递最后一步会弹窗暂停，方便你人工核对后手动点击提交。",
       sec5_title: "5. 安全检查",
       sec5_safety: "<strong>固定安全规则</strong><p>浏览器保持可见；每次提交前暂停；不会后台连续运行；不会自动关注公司。</p>",
       sec6_title: "6. 登录并运行",
@@ -382,7 +377,6 @@
       sec4_desc: "(Default Behavior: If no options are selected, the bot will use your static PDF resume. Before each submission, the bot will pause for manual review.)",
       lbl_use_AI: "<strong>One Custom Resume Per Company (AI Tailoring)</strong>: Automatically adjust and optimize your experience bullets for each job (requires Word format master resume at <code>user_data/resume/resume.docx</code>)",
       lbl_shortlist: "<strong>Harvesting Mode (Collect jobs & generate resumes only)</strong>: Collect matched jobs and generate tailored resumes into a spreadsheet, but do not click submit on LinkedIn (ideal for reviewing first before applying)",
-      lbl_auto_submit: "<strong>One-Click Auto-Submit (Silent Submission Mode)</strong>: Automatically complete forms and click submit without pausing. If unchecked, the bot will pause at the final step for your manual review.",
       sec5_title: "5. Safety Checks",
       sec5_safety: "<strong>Fixed Safety Rules</strong><p>Browser remains visible; pauses before final submission; no background loops; no auto-following companies.</p>",
       sec6_title: "6. Login & Start Assistant",
@@ -497,8 +491,6 @@
     document.getElementById('did_masters').value = s.did_masters ? 'true' : 'false';
     document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
     document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
-    document.getElementById('auto_submit').checked = !(q.pause_before_submit ?? true);
-    
     updateUI();
     toggleDocxCard();
     refreshChecks();
@@ -517,7 +509,7 @@
         website: value('website'), recent_employer: value('recent_employer'),
         desired_salary: Number(value('desired_salary') || 0),
         notice_period: Number(value('notice_period') || 0),
-        pause_before_submit: !document.getElementById('auto_submit').checked
+        pause_before_submit: true
       },
       search: {
         search_terms: value('search_terms').split('\n').map(x => x.trim()).filter(Boolean),

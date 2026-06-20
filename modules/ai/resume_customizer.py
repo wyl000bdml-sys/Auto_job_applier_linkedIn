@@ -101,7 +101,6 @@ def generate_tailored_resume(job_description: str, job_id: str, company_name: st
         candidates = [
             Path("user_data/resume/resume.docx"),
             Path("resume.docx"),
-            Path("user_data/resume/Yulun_Wu_Resume.docx"),
             Path("user_data/resume/resume.pdf").with_suffix(".docx")
         ]
         for c in candidates:
@@ -135,7 +134,7 @@ def generate_tailored_resume(job_description: str, job_id: str, company_name: st
         
     # 3. Compile and save the tailored DOCX file
     clean_company = re.sub(r'[^a-zA-Z0-9]', '_', company_name)
-    filename = f"Yulun_Wu_Resume_{clean_company}_{job_id}.docx"
+    filename = f"Tailored_Resume_{clean_company}_{job_id}.docx"
     output_dir = Path("all resumes")
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / filename

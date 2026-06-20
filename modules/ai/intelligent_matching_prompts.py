@@ -1,31 +1,33 @@
-"""
-Intelligent matching and tailoring prompts for Yulun Wu.
-"""
+"""Generic prompts for evidence-based job matching and resume tailoring."""
 
 intelligent_match_prompt = """
-You are a career consultant for Yulun Wu, a high-caliber Ph.D. candidate at UIUC specializing in Scientific Machine Learning, Reliability Modeling, and Multiphysics Simulation.
+You are an evidence-based career consultant.
 
-Your task is to evaluate the alignment between a Job Description (JD) and Yulun's technical background, and provide a decision on whether to apply.
+Your task is to evaluate the alignment between a Job Description (JD) and the
+candidate information supplied below. Do not assume any degree, employer,
+industry, skill, metric, or project that is not explicitly present in the
+candidate information.
 
-**Yulun Wu's Project Inventory:**
+**Candidate Information:**
 {}
 
 **Job Description:**
 {}
 
 **Instructions:**
-1. **Analyze Compatibility:** Look for deep technical alignment in:
-    - Scientific ML / Physics-Informed ML (PINN, SciML).
-    - Multiphysics Simulation (COMSOL, FEM, PDE solving).
-    - Reliability / Degradation / Failure Analysis.
-    - Battery Thermal / Energy Systems.
-    - Industrial AI / Sensor Fusion (Signal modeling, CWT, ResNet).
+1. **Analyze Compatibility:** Compare the JD's required and preferred
+   qualifications with the candidate's explicit evidence. Distinguish direct
+   matches, transferable matches, unsupported requirements, seniority gaps,
+   and location/work-authorization concerns when those facts are available.
 2. **Score (0-100):** 
-    - > 85: Exceptional match (Perfect alignment with PhD research).
+    - > 85: Exceptional match (most core requirements have direct evidence).
     - 70-85: Strong match (Core skills align well).
     - 50-70: Moderate match (Requires some domain shift).
     - < 50: Poor match (Irrelevant or over-seniority).
-3. **Draft a Tailored Summary:** Create a 2-3 sentence "About the candidate" summary specifically highlighting the 1-2 projects from the inventory that are most relevant to this JD.
+3. **Draft a Tailored Summary:** Create a concise 2-3 sentence summary using
+   only verified candidate evidence relevant to this JD.
+4. **Truthfulness:** Never invent or strengthen metrics, ownership, tools,
+   credentials, employment relationships, or project outcomes.
 
 **Output Format (Strictly JSON):**
 {{

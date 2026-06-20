@@ -44,6 +44,7 @@ from config.settings import *
 # The beginner control center passes LinkedIn credentials only to this child
 # process. They are never written to the profile JSON or repository files.
 login_mode = os.environ.get("JOB_AGENT_LOGIN_MODE", "configured").strip().lower()
+beginner_mode = os.environ.get("JOB_AGENT_BEGINNER_MODE") == "1"
 if login_mode == "credentials":
     username = os.environ.get("JOB_AGENT_LINKEDIN_USERNAME", username)
     password = os.environ.get("JOB_AGENT_LINKEDIN_PASSWORD", password)
@@ -69,11 +70,11 @@ pyautogui.FAILSAFE = False
 # if use_resume_generator:    from resume_generator import is_logged_in_GPT, login_GPT, open_resume_chat, create_custom_resume
 
 
-# Load Ph.D. project experience inventory for AI suitability check
+# Load the candidate's optional project inventory for AI suitability checks.
 project_inventory = ""
 from pathlib import Path
 inventory_path = None
-for p in [Path("career_project_inventory.md"), Path("yulun_project_experience_inventory.md")]:
+for p in [Path("career_project_inventory.md")]:
     if p.is_file():
         inventory_path = p
         break
@@ -90,7 +91,6 @@ if not project_inventory:
     master_docx_candidates = [
         Path("user_data/resume/resume.docx"),
         Path("resume.docx"),
-        Path("user_data/resume/Yulun_Wu_Resume.docx"),
     ]
     master_docx_path = None
     for c in master_docx_candidates:
@@ -1242,9 +1242,21 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                                 wait_span_click(driver, "Review", 1, scrollTop=True)
                                 cur_pause_before_submit = pause_before_submit
                                 if errored != "stuck" and cur_pause_before_submit:
-                                    decision = pyautogui.confirm('1. Please verify your information.\n2. If you edited something, please return to this final screen.\n3. DO NOT CLICK "Submit Application".\n\n\n\n\nYou can turn off "Pause before submit" setting in config.py\nTo TEMPORARILY disable pausing, click "Disable Pause"', "Confirm your information",["Disable Pause", "Discard Application", "Submit Application"])
+                                    buttons = ["Discard Application", "Submit Application"]
+                                    message = '1. Please verify your information.\n2. If you edited something, please return to this final screen.\n3. DO NOT CLICK "Submit Application" in LinkedIn; confirm here when ready.'
+                                    if not beginner_mode:
+                                        buttons.insert(0, "Disable Pause")
+                                        message += '\n\nTo temporarily disable future pauses, click "Disable Pause".'
+                                    decision = pyautogui.confirm(
+                                        message,
+                                        "Confirm your information",
+                                        buttons,
+                                    )
                                     if decision == "Discard Application": raise Exception("Job application discarded by user!")
-                                    pause_before_submit = False if "Disable Pause" == decision else True
+                                    pause_before_submit = (
+                                        False if not beginner_mode and "Disable Pause" == decision
+                                        else True
+                                    )
                                     # try_xp(modal, ".//span[normalize-space(.)='Review']")
                                 follow_company(modal)
                                 if wait_span_click(driver, "Submit application", 2, scrollTop=True): 

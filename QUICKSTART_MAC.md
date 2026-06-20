@@ -81,8 +81,8 @@ http://127.0.0.1:5050
         Word resume based on the job description.
     *   **Collect only, don't submit**: only collects jobs and generates resumes
         locally without actually applying on LinkedIn.
-    *   **Fully automatic submission**: confirms and submits automatically. If
-        unchecked, it pauses at the final step for you to review and submit manually.
+    *   **Manual review is always enabled in beginner mode**: the assistant pauses
+        at the final step so you can review every application before submission.
 *   **Step 4: Preflight checks**
     *   The page automatically runs checks (Chrome, profile completeness, resume
         file presence, etc.).

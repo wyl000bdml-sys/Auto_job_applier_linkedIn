@@ -49,6 +49,7 @@ def _safe_profile_update(payload: dict[str, Any]) -> dict[str, Any]:
                 current[section][key] = value
 
     # Beginner mode safety invariants cannot be disabled from the UI.
+    current["questions"]["pause_before_submit"] = True
     current["questions"]["pause_at_failed_question"] = True
     current["questions"]["overwrite_previous_answers"] = False
     current["settings"]["run_in_background"] = False
@@ -243,6 +244,7 @@ def start_bot():
         profile = load_profile()
         use_AI_tailor = profile.get("settings", {}).get("use_AI_resume_tailoring", False)
         env = os.environ.copy()
+        env["JOB_AGENT_BEGINNER_MODE"] = "1"
         env["JOB_AGENT_LOGIN_MODE"] = login_mode
         env["JOB_AGENT_DISABLE_AI"] = "0" if use_AI_tailor else "1"
         if login_mode == "credentials":

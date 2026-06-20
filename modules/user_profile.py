@@ -214,7 +214,14 @@ def validate_profile(profile: dict[str, Any] | None = None) -> list[dict[str, st
                 }
             )
 
-
+    if not questions.get("pause_before_submit", False):
+        issues.append(
+            {
+                "level": "error",
+                "field": "pause_before_submit",
+                "message": "Manual review before submission must remain enabled in beginner mode.",
+            }
+        )
     if current.get("settings", {}).get("run_in_background", False):
         issues.append(
             {
