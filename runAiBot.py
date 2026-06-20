@@ -1055,8 +1055,8 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                             skills = "Error extracting skills"
                         ##<
 
-                    # Generate tailored resume using configured AI provider if active
-                    if use_AI and ai_provider.lower() in ["gemini", "openai", "deepseek"] and description != "Unknown":
+                    # Generate tailored resume using configured AI provider if active and enabled
+                    if use_AI and use_AI_resume_tailoring and ai_provider.lower() in ["gemini", "openai", "deepseek"] and description != "Unknown":
                         try:
                             from modules.ai.resume_customizer import generate_tailored_resume
                             print_lg(f"Attempting to generate tailored resume for '{company}'...")

@@ -50,6 +50,11 @@ stop_date_cycle_at_24hr = True      # True or False, Note: True or False are cas
 
 # >>>>>>>>>>> RESUME GENERATOR (Experimental & In Development) <<<<<<<<<<<
 
+# Enable dynamic, company-specific resume tailoring at runtime using AI?
+# If True, the bot will tailor your 'resume.docx' to each JD and upload it.
+# If False, the bot will upload your default static resume.
+use_AI_resume_tailoring = False
+
 # Give the path to the folder where all the generated resumes are to be stored
 generated_resume_path = "all resumes/" # (In Development)
 
