@@ -1,0 +1,6 @@
+selenium
+undetected-chromedriver
+pyautogui
+setuptools
+flask
+flask-cors

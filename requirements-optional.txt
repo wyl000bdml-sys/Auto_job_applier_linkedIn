@@ -1,0 +1,8 @@
+# Install only when using optional AI, document-generation, or Playwright tools.
+openai
+google-generativeai
+python-docx
+fpdf
+playwright
+playwright-stealth
+pyperclip
