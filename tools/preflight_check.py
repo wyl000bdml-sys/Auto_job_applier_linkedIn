@@ -2,14 +2,13 @@
 
 from __future__ import annotations
 
-import os
-import shutil
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from modules.chrome_detect import chrome_available
 from modules.user_profile import load_profile, profile_path, validate_profile
 
 
@@ -22,14 +21,7 @@ def main() -> int:
     print(f"[{'OK' if python_ok else 'BLOCKED'}] Python {sys.version.split()[0]}")
     blocking |= not python_ok
 
-    chrome_paths = [
-        Path(os.environ.get("PROGRAMFILES", "")) / "Google/Chrome/Application/chrome.exe",
-        Path(os.environ.get("PROGRAMFILES(X86)", "")) / "Google/Chrome/Application/chrome.exe",
-        Path(os.environ.get("LOCALAPPDATA", "")) / "Google/Chrome/Application/chrome.exe",
-    ]
-    chrome_ok = any(path.is_file() for path in chrome_paths) or bool(
-        shutil.which("google-chrome")
-    )
+    chrome_ok = chrome_available()
     print(f"[{'OK' if chrome_ok else 'BLOCKED'}] Google Chrome")
     blocking |= not chrome_ok
 
