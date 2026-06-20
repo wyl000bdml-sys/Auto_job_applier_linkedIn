@@ -1,4 +1,4 @@
-# 新手快速开始（Windows）
+# 新手快速开始（Windows & macOS）
 
 这个项目现在提供一个本地控制中心。用户不需要编辑 Python 文件，也不需要
 Codex、ChatGPT 或其他 Agent。
@@ -8,8 +8,9 @@ Codex、ChatGPT 或其他 Agent。
 1. **安装 Google Chrome 浏览器**：
    - 访问 [Google Chrome 官网](https://www.google.com/chrome/)，点击蓝色 **【下载 Chrome】** 按钮进行安装。
 2. **安装 Python 3.10 或更新版本**：
-   - 访问 [Python 官网下载页面](https://www.python.org/downloads/)，下载适用于 Windows 的 Python 安装程序。
-   - 运行安装程序时，**务必在弹出的安装界面最下方勾选 “Add python.exe to PATH”**（将 Python 添加到系统环境变量），然后再点击顶部的 **【Install Now】**。
+   - 访问 [Python 官网下载页面](https://www.python.org/downloads/)，下载适用于您系统的 Python 安装程序。
+   - **Windows 用户**：运行安装程序时，**务必在弹出的安装界面最下方勾选 "Add python.exe to PATH"**（将 Python 添加到系统环境变量），然后再点击顶部的 **【Install Now】**。
+   - **macOS 用户**：运行 `.pkg` 安装包，按默认设置完成安装即可。
    
    ![安装 Python 勾选 Add to PATH](docs/python_download_page.png)
 
@@ -24,10 +25,16 @@ Codex、ChatGPT 或其他 Agent。
    
 2. **解压 ZIP 压缩包**：
    - 下载完成后，将 ZIP 压缩包解压到一个独立的文件夹中。**注意：绝对不能直接在压缩包中双击运行**。
-3. 双击运行：
-   ```text
-   START_HERE.bat
-   ```
+
+3. **启动程序**：
+
+   | 系统 | 启动文件 | 操作方式 |
+   |------|----------|----------|
+   | **Windows** | `START_HERE.bat` | 双击运行 |
+   | **macOS** | `START_HERE.command` | 右键 → 打开（首次运行需右键允许） |
+
+   > **macOS 首次运行提示**：如果 macOS 提示"无法打开，因为无法验证开发者"，
+   > 请右键点击 `START_HERE.command` → 选择"**打开**" → 点击"**打开**"按钮。
 
 首次运行会自动创建独立环境并安装组件。安装完成后，浏览器会自动打开本地控制中心：
 ```text
@@ -43,14 +50,14 @@ http://127.0.0.1:5050
     *   填写完成后，点击 **【保存资料】** 按钮。这会将信息安全保存到本机的 `user_data/profile.json` 中。
 *   **第 2 步：上传简历**
     *   **上传 PDF 简历**：点击选择您的 PDF 文件，然后点击 **【上传 PDF 简历】**。
-    *   **启用 AI 简历定制（可选）**：如果您勾选了下方的 **“一公司一简历 (AI 自动润色)”**，网页会动态在中间滑出 **“3.1 上传 Word 格式母版简历”** 的区域。点击选择您的 `.docx` 母版简历，并点击 **【上传 Word 母版简历】**。
+    *   **启用 AI 简历定制（可选）**：如果您勾选了下方的 **"一公司一简历 (AI 自动润色)"**，网页会动态在中间滑出 **"3.1 上传 Word 格式母版简历"** 的区域。点击选择您的 `.docx` 母版简历，并点击 **【上传 Word 母版简历】**。
 *   **第 3 步：设定投递与定制选项**
     *   **一公司一简历**：AI 会根据岗位 JD 自动润色 Word 简历的项目描述。
     *   **仅收录不投递**：只收录岗位并自动生成简历到本地，不在 LinkedIn 真正申请。
     *   **一键全自动投递**：全自动确认提交。不勾选则在最后一步暂停，由您人工核对后手动点击提交。
 *   **第 4 步：安全检查（Preflight Checks）**
     *   页面会自动运行检查项（包括 Chrome 浏览器、资料完整性、简历文件存在性等）。
-    *   **所有检查项必须显示绿色（正常）** 且上方提示“准备完成，可以启动”，才允许运行。
+    *   **所有检查项必须显示绿色（正常）** 且上方提示"准备完成，可以启动"，才允许运行。
 *   **第 5 步：登录并启动**
     *   选择您的 LinkedIn 登录方式（手动登录 / 自动填写）。
     *   在文本框中输入大写：`REVIEW`。
@@ -93,9 +100,9 @@ REVIEW
 
 ## 停止
 
-- 点击本地页面中的“停止”；或者
+- 点击本地页面中的"停止"；或者
 - 关闭自动化浏览器窗口；或者
-- 在黑色启动窗口按 `Ctrl+C`
+- 在终端窗口按 `Ctrl+C`
 
 ## 资料保存位置
 
@@ -121,13 +128,18 @@ user_data/
 
 在浏览器手动访问 <http://127.0.0.1:5050>。
 
-### Python was not found
+### Python was not found / 未找到 Python
 
-重新安装 Python，勾选 **Add Python to PATH**，重启电脑后再次双击。
+- **Windows**：重新安装 Python，勾选 **Add Python to PATH**，重启电脑后再次双击。
+- **macOS**：确认已安装 Python 3.10+，在终端运行 `python3 --version` 检查。
 
 ### 安装组件失败
 
-检查网络、防火墙和 VPN，然后重新运行 `START_HERE.bat`。
+检查网络、防火墙和 VPN，然后重新运行启动文件。
+
+### macOS：提示"开发者无法验证"
+
+右键点击 `START_HERE.command` → 选择"打开" → 点击"打开"。只需操作一次。
 
 ### LinkedIn 要求验证码
 

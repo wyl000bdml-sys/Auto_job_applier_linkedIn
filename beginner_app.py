@@ -74,11 +74,20 @@ def _preflight() -> dict[str, Any]:
     profile = load_profile()
     issues = validate_profile(profile)
     chrome_paths = [
+        # Windows paths
         Path(os.environ.get("PROGRAMFILES", "")) / "Google/Chrome/Application/chrome.exe",
         Path(os.environ.get("PROGRAMFILES(X86)", "")) / "Google/Chrome/Application/chrome.exe",
         Path(os.environ.get("LOCALAPPDATA", "")) / "Google/Chrome/Application/chrome.exe",
+        # macOS paths
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path.home() / "Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     ]
-    chrome_ok = any(path.is_file() for path in chrome_paths) or bool(shutil.which("google-chrome"))
+    chrome_ok = any(path.is_file() for path in chrome_paths) or bool(
+        shutil.which("google-chrome")
+        or shutil.which("google-chrome-stable")
+        or shutil.which("chromium-browser")
+        or shutil.which("chromium")
+    )
     if not chrome_ok:
         issues.append(
             {
