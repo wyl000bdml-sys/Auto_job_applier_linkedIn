@@ -37,9 +37,17 @@ Your task is to evaluate the alignment between a Job Description (JD) and Yulun'
 """
 
 tailored_resume_bullet_prompt = """
-Based on the following Job Description, select the 3 most relevant projects from Yulun's inventory and rewrite 1-2 bullet points for each to mirror the JD's terminology while staying truthful.
+You are an expert career consultant and resume writer. 
 
-**Inventory:**
+You are given a candidate's master resume as a numbered list of paragraphs, and a target Job Description (JD).
+Your goal is to optimize the resume's professional summary and experience bullet points to match the JD's terminology, keywords, and requirements, while staying 100% truthful to the candidate's original achievements.
+
+**Rules:**
+1. Only select paragraphs that represent the professional profile/summary or project/experience bullet points. Do NOT suggest changes for headers, contact details, company names, job titles, dates, education details, or publication listings.
+2. For the selected experience bullet points and summary paragraphs, rewrite them to align with the keywords and tools mentioned in the JD. Maintain structural facts and numbers (e.g., sample sizes, percentage improvements, tool names must not be fabricated).
+3. Output a JSON object containing a list of updates, specifying the index of the paragraph and the rewritten text.
+
+**Master Resume Paragraphs:**
 {}
 
 **Job Description:**
@@ -47,10 +55,11 @@ Based on the following Job Description, select the 3 most relevant projects from
 
 **Output Format (Strictly JSON):**
 {{
-    "selected_projects": [
+    "updates": [
         {{
-            "title": "Project Title",
-            "bullets": ["Bullet 1", "Bullet 2"]
+            "index": int,
+            "original": "original text of paragraph",
+            "rewritten": "optimized and aligned text of paragraph"
         }}
     ]
 }}
