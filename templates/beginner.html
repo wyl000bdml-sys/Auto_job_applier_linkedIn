@@ -184,18 +184,6 @@
     <div id="resumeMessage"></div>
   </section>
 
-  <section class="card hidden" id="docxResumeCard">
-    <h2>3.1 上传 Word 格式母版简历</h2>
-    <p class="muted" style="margin-bottom: 12px;">
-      <strong>母版包含内容说明：</strong> 必须是 <code>.docx</code> 格式。请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。
-      AI 将在此基础上匹配您要申请的岗位的职位描述（JD），智能优化重写“个人总结(Summary)”与“项目经历描述(Experience Bullets)”以完美符合岗位要求。
-      同时 100% 保持您原 Word 简历的精美排版和结构。您的姓名、联系方式、教育经历与起止时间等固定信息将保持不变。
-    </p>
-    <input id="resume_docx" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-    <div class="actions"><button class="secondary" onclick="uploadDocxResume()">上传 Word 母版简历</button></div>
-    <div id="docxMessage"></div>
-  </section>
-
   <section class="card">
     <h2>4. 简历定制与投递选项</h2>
     <p class="muted" style="margin-bottom: 15px;">（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）</p>
@@ -203,6 +191,20 @@
       <input type="checkbox" id="use_AI_resume_tailoring" style="width: auto;" onchange="toggleDocxCard()">
       <label for="use_AI_resume_tailoring" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）</label>
     </div>
+
+    <div id="docxResumeCard" class="hidden" style="margin: 10px 0 15px 24px; padding: 14px; background: #f8fafc; border: 1px solid var(--line); border-radius: 8px;">
+      <label style="font-weight: 600; margin-bottom: 6px;">上传 Word 格式母版简历 (.docx)</label>
+      <p class="muted" style="font-size: 13px; margin: 4px 0 10px; line-height: 1.4;">
+        <strong>母版包含内容说明：</strong> 请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。
+        AI 将在此基础上匹配岗位的职位描述（JD），智能优化重写“个人总结(Summary)”与“项目经历描述(Experience Bullets)”以完美符合岗位要求，同时 100% 保持您原简历的精美排版和字体。固定信息如姓名、联系方式、教育背景和项目时间保持不变。
+      </p>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <input id="resume_docx" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="flex: 1; padding: 6px 10px; font-size: 14px;">
+        <button class="secondary" onclick="uploadDocxResume()" style="padding: 8px 14px; font-size: 14px; white-space: nowrap;">上传母版</button>
+      </div>
+      <div id="docxMessage" style="margin-top: 8px;"></div>
+    </div>
+
     <div style="margin-top: 12px;" class="check">
       <input type="checkbox" id="shortlist_only" style="width: auto;">
       <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）</label>
