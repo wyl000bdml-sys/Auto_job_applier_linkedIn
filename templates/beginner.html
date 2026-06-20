@@ -184,7 +184,7 @@
     <div id="resumeMessage"></div>
   </section>
 
-  <section class="card">
+  <section class="card hidden" id="docxResumeCard">
     <h2>3.1 上传 Word 格式母版简历</h2>
     <p class="muted" style="margin-bottom: 12px;">
       <strong>母版包含内容说明：</strong> 必须是 <code>.docx</code> 格式。请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。
@@ -200,7 +200,7 @@
     <h2>4. 简历定制与投递选项</h2>
     <p class="muted" style="margin-bottom: 15px;">（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）</p>
     <div class="check">
-      <input type="checkbox" id="use_AI_resume_tailoring" style="width: auto;">
+      <input type="checkbox" id="use_AI_resume_tailoring" style="width: auto;" onchange="toggleDocxCard()">
       <label for="use_AI_resume_tailoring" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）</label>
     </div>
     <div style="margin-top: 12px;" class="check">
@@ -250,6 +250,11 @@
     document.getElementById(id).innerHTML = text ? `<div class="notice ${type}">${text}</div>` : '';
   };
 
+  function toggleDocxCard() {
+    const checked = document.getElementById('use_AI_resume_tailoring').checked;
+    document.getElementById('docxResumeCard').classList.toggle('hidden', !checked);
+  }
+
   async function loadProfile() {
     const response = await fetch('/api/profile');
     const p = await response.json();
@@ -273,6 +278,7 @@
     document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
     document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
     document.getElementById('auto_submit').checked = !(q.pause_before_submit ?? true);
+    toggleDocxCard();
     refreshChecks();
   }
 
