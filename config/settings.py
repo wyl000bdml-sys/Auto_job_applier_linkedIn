@@ -67,6 +67,13 @@ generated_resume_path = "all resumes/" # (In Development)
 # Directory and name of the files where history of applied jobs is saved (Sentence after the last "/" will be considered as the file name).
 file_name = "all excels/all_applied_applications_history.csv"
 failed_file_name = "all excels/all_failed_applications_history.csv"
+shortlist_file_name = "all excels/shortlisted_jobs_history.csv"
+
+# Enable Shortlist Only mode?
+# If True, the bot will scrape matched jobs and generate their custom resumes,
+# but it will NOT click apply or submit them. It saves them to shortlisted_jobs_history.csv.
+shortlist_only = False
+
 logs_folder_path = "logs/"
 
 # Set the maximum amount of time allowed to wait between each click in secs

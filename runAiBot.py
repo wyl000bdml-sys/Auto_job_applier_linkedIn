@@ -887,6 +887,46 @@ def submitted_jobs(job_id: str, title: str, company: str, work_location: str, wo
         pyautogui.alert("Failed to update the excel of applied jobs!\nProbably because of 1 of the following reasons:\n1. The file is currently open or in use by another program\n2. Permission denied to write to the file\n3. Failed to find the file", "Failed Logging")
 
 
+def save_shortlisted_job(job_id: str, title: str, company: str, work_location: str, work_style: str, description: str, 
+                         experience_required: int | Literal['Unknown', 'Error in extraction'], 
+                         skills: list[str] | Literal['In Development'], hr_name: str | Literal['Unknown'], hr_link: str | Literal['Unknown'], 
+                         resume_path: str, reposted: bool, date_listed: datetime | Literal['Unknown'], job_link: str) -> None:
+    """
+    Creates or updates the Shortlisted jobs CSV file, when a job matches but shortlist_only mode is enabled.
+    """
+    try:
+        # Resolve folder
+        folder = Path(shortlist_file_name).parent
+        folder.mkdir(parents=True, exist_ok=True)
+        
+        with open(shortlist_file_name, mode='a', newline='', encoding='utf-8') as csv_file:
+            fieldnames = ['Job ID', 'Title', 'Company', 'Work Location', 'Work Style', 'About Job', 'Experience required', 'Skills required', 'HR Name', 'HR Link', 'Generated Resume Path', 'Re-posted', 'Date Posted', 'Date Shortlisted', 'Job Link']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if csv_file.tell() == 0: 
+                writer.writeheader()
+            writer.writerow({
+                'Job ID': truncate_for_csv(job_id), 
+                'Title': truncate_for_csv(title), 
+                'Company': truncate_for_csv(company), 
+                'Work Location': truncate_for_csv(work_location), 
+                'Work Style': truncate_for_csv(work_style), 
+                'About Job': truncate_for_csv(description), 
+                'Experience required': truncate_for_csv(experience_required), 
+                'Skills required': truncate_for_csv(skills), 
+                'HR Name': truncate_for_csv(hr_name), 
+                'HR Link': truncate_for_csv(hr_link), 
+                'Generated Resume Path': truncate_for_csv(resume_path), 
+                'Re-posted': truncate_for_csv(reposted), 
+                'Date Posted': truncate_for_csv(date_listed), 
+                'Date Shortlisted': datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                'Job Link': truncate_for_csv(job_link)
+            })
+        csv_file.close()
+        print_lg(f"Saved shortlisted job details to: {shortlist_file_name}")
+    except Exception as e:
+        print_lg("Failed to update shortlisted jobs list!", e)
+        pyautogui.alert(f"Failed to update the excel of shortlisted jobs!\nError: {e}", "Failed Logging")
+
 
 # Function to discard the job application
 def discard_job() -> None:
@@ -1068,6 +1108,18 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                                 print_lg("Tailored resume generation returned None. Falling back to default resume.")
                         except Exception as e:
                             print_lg(f"Error generating tailored resume: {e}. Falling back to default resume.")
+
+                    # If shortlist_only mode is enabled, save to shortlist and skip Easy Apply/Apply
+                    if shortlist_only:
+                        print_lg(f"Shortlist Only Mode: Shortlisting '{title} | {company}'...")
+                        save_shortlisted_job(
+                            job_id, title, company, work_location, work_style, description,
+                            experience_required, skills, hr_name, hr_link, active_resume_path,
+                            reposted, date_listed, job_link
+                        )
+                        applied_jobs.add(job_id)
+                        current_count += 1
+                        continue
 
                     uploaded = False
                     # Case 1: Easy Apply Button
