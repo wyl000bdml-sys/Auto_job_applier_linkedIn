@@ -193,6 +193,10 @@
       <input type="checkbox" id="shortlist_only" style="width: auto;">
       <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;">仅做收录不投递 (Shortlist 模式，生成定制简历并记录到 Excel，不点击申请)</label>
     </div>
+    <div style="margin-top: 10px;" class="check">
+      <input type="checkbox" id="auto_submit" style="width: auto;">
+      <label for="auto_submit" style="display: inline; margin-bottom: 0; font-weight: normal;">一键全自动投递 (不暂停，自动确认并提交申请)</label>
+    </div>
   </section>
 
   <section class="card">
@@ -254,6 +258,7 @@
     document.getElementById('did_masters').value = s.did_masters ? 'true' : 'false';
     document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
     document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
+    document.getElementById('auto_submit').checked = !(q.pause_before_submit ?? true);
     refreshChecks();
   }
 
@@ -269,7 +274,8 @@
         us_citizenship: value('us_citizenship'), linkedIn: value('linkedin'),
         website: value('website'), recent_employer: value('recent_employer'),
         desired_salary: Number(value('desired_salary') || 0),
-        notice_period: Number(value('notice_period') || 0)
+        notice_period: Number(value('notice_period') || 0),
+        pause_before_submit: !document.getElementById('auto_submit').checked
       },
       search: {
         search_terms: value('search_terms').split('\n').map(x => x.trim()).filter(Boolean),

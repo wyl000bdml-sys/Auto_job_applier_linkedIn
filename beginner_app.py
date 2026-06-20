@@ -49,7 +49,6 @@ def _safe_profile_update(payload: dict[str, Any]) -> dict[str, Any]:
                 current[section][key] = value
 
     # Beginner mode safety invariants cannot be disabled from the UI.
-    current["questions"]["pause_before_submit"] = True
     current["questions"]["pause_at_failed_question"] = True
     current["questions"]["overwrite_previous_answers"] = False
     current["settings"]["run_in_background"] = False
