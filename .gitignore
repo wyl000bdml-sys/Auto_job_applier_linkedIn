@@ -1,4 +1,5 @@
 __pycache__
+*.py[cod]
 .vscode
 .idea
 
@@ -9,6 +10,39 @@ logs
 old
 
 secrets.py
+config/secrets.py
 config/personals.py
 .venv
 apikeys.py
+
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+
+# Browser sessions may contain cookies and login state
+playwright_profile/
+chrome_profile/
+user-data-dir/
+user_data/
+
+# Personal application data and generated documents
+data/
+tailored_resumes/
+docs/application_shortlist_sources.md
+docs/lila_digital_twins_application_log.md
+career_project_map_yulun.md
+internship_coop_targets_yulun.md
+target_jobs_resume_tailoring_yulun.md
+validation_keyword_project_mapping_yulun.md
+weekly_search_strategy.md
+yulun_project_experience_inventory.md
+career_project_inventory.md
+update_linkedin_profile.py
+config/search_yulun_recommended.py
+tools/build_lila_*.py
+tools/build_tailored_resumes.py
+tools/linkedin_smoke_test.py
+
+# Local dependency and render caches
+.render_deps/
