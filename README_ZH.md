@@ -1,9 +1,10 @@
-# 本地求职申请助手 (定制增强版)
+# 本地求职申请助手 — Windows 版 (定制增强版)
 
 [English](README.md) | [中文说明](README_ZH.md)
 
-> 🍎 **macOS 用户**：针对 macOS 优化的版本（基于 Spotlight 的 Chrome 检测、
-> 专门的 macOS 新手指南）位于 [`mac_branch`](../../tree/mac_branch) 分支。
+> 🪟 **这是 Windows 版本（`main` 分支）。** 下方的安装与说明均针对 Windows。
+> 🍎 **macOS 用户**：请改用针对 macOS 优化的 [`mac_branch`](../../tree/mac_branch) 分支
+> （基于 Spotlight 的 Chrome 检测 + 专门的 macOS 指南）。
 
 ![本地网页控制中心界面](docs/beginner_ui_zh.png)
 

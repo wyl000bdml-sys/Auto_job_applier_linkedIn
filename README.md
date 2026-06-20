@@ -1,10 +1,11 @@
-# Local Job Application Assistant (Customized Fork)
+# Local Job Application Assistant — Windows (Customized Fork)
 
 [English](README.md) | [中文说明](README_ZH.md)
 
-> 🍎 **macOS users:** a macOS-tuned version — with Spotlight-based Chrome
-> detection and a dedicated macOS quick-start guide — lives in the
-> [`mac_branch`](../../tree/mac_branch) branch.
+> 🪟 **This is the Windows version (`main` branch).** Setup and instructions
+> below target Windows.
+> 🍎 **macOS users:** use the macOS-tuned [`mac_branch`](../../tree/mac_branch)
+> branch instead (Spotlight-based Chrome detection + a dedicated macOS guide).
 
 ![Local Control Center Web UI](docs/beginner_ui_en.png)
 
