@@ -36,7 +36,8 @@ START_HERE.bat
 The script installs required components when needed and opens a private local
 page at <http://127.0.0.1:5050>.
 
-See the Chinese beginner guide: [QUICKSTART.md](QUICKSTART.md).
+- Windows guide: [QUICKSTART.md](QUICKSTART.md)
+- macOS guide: [QUICKSTART_MAC.md](QUICKSTART_MAC.md)
 
 ## What the user provides
 

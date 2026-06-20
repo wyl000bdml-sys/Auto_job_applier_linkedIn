@@ -1,23 +1,31 @@
-# Beginner Quick Start (Windows)
+# Beginner Quick Start (macOS)
 
 This project ships with a local control center. You don't need to edit any
 Python files, and you don't need Codex, ChatGPT, or any other agent.
 
-> **中文版**：请参阅 [QUICKSTART_ZH.md](QUICKSTART_ZH.md)。
-> **macOS users**: see [QUICKSTART_MAC.md](QUICKSTART_MAC.md).
+> **中文版**：请参阅 [QUICKSTART_MAC_ZH.md](QUICKSTART_MAC_ZH.md)。
+> **Windows users**: see [QUICKSTART.md](QUICKSTART.md).
 
 ## Before you start
 
 1. **Install Google Chrome**:
    - Go to the [Google Chrome site](https://www.google.com/chrome/) and click the
      blue **Download Chrome** button to install it.
+   - **Drag Google Chrome into the Applications folder.** Don't run it straight
+     from the disk image (`.dmg`) or the Downloads folder, or the safety check
+     may report that Chrome is not installed.
 2. **Install Python 3.10 or newer**:
-   - Go to the [Python downloads page for Windows](https://www.python.org/downloads/windows/)
-     and download the Windows installer.
-   - When running the installer, **make sure to check "Add python.exe to PATH"** at
-     the bottom of the install screen, then click **Install Now** at the top.
+   - Go to the [Python downloads page for macOS](https://www.python.org/downloads/macos/)
+     and download the latest macOS installer (`.pkg`).
+   - Double-click the `.pkg` file and follow the default steps. Once finished,
+     Python is configured automatically — **no environment-variable setup is
+     needed**.
 
-   ![Check Add Python to PATH during install](docs/python_download_page.png)
+   > **Verify the install**: open **Terminal** and run the command below. If a
+   > version number appears, the install succeeded:
+   > ```bash
+   > python3 --version
+   > ```
 
 3. **A ready-to-use PDF resume.**
 
@@ -30,18 +38,28 @@ Python files, and you don't need Codex, ChatGPT, or any other agent.
    ![Click Download ZIP on GitHub](docs/github_code_download.png)
 
 2. **Unzip the archive**:
-   - After downloading, extract the ZIP into its own folder. **Never run a script
-     from inside the archive — extract it first.**
-3. **Double-click to run**:
-   ```text
-   START_HERE.bat
-   ```
+   - After downloading, double-click the ZIP to extract it into a folder.
+     **Never run a script from inside the archive — extract it first.**
 
-The first run automatically creates an isolated environment and installs the
-components. When setup finishes, your browser opens the local control center:
+3. **Launch the program**:
+   - In Finder, find the extracted folder, **right-click** `START_HERE.command`
+     and choose **Open**.
+   - If macOS shows "cannot be opened because the developer cannot be verified",
+     click the **Open** button (this only appears on the first run).
+
+   > **Tip**: don't just double-click `START_HERE.command`. The first run must be
+   > right-click → Open, otherwise macOS Gatekeeper blocks it.
+
+The first run automatically does the following in the background:
+- creates an isolated Python virtual environment (`.venv/`)
+- installs all required components
+
+When setup finishes, your browser opens the local control center:
 ```text
 http://127.0.0.1:5050
 ```
+
+> **Note**: keep the Terminal window open. Closing it stops the service.
 
 ![Local control center web UI](docs/beginner_ui_en.png)
 
@@ -118,7 +136,7 @@ reviewed by you.
 
 - Click "Stop" on the local page; or
 - close the automation browser window; or
-- press `Ctrl+C` in the black launcher window.
+- press `Ctrl+C` in the Terminal window.
 
 ## Where your data is stored
 
@@ -144,14 +162,37 @@ Do not publish:
 
 Open <http://127.0.0.1:5050> in your browser manually.
 
-### Python was not found
+### "Cannot be opened because the developer cannot be verified"
 
-Reinstall Python, check **Add Python to PATH**, restart your computer, and
-double-click `START_HERE.bat` again.
+This is a normal macOS Gatekeeper prompt. To handle it:
+1. **Right-click** `START_HERE.command`
+2. Choose **Open**
+3. Click the **Open** button in the dialog
 
-### Installing components failed
+You only need to do this once; afterward you can double-click to run.
 
-Check your network, firewall, and VPN, then run `START_HERE.bat` again.
+### Python not found / `python3` command not found
+
+Run in Terminal:
+```bash
+python3 --version
+```
+If it says "command not found", Python isn't installed correctly. Re-download the
+installer from [python.org](https://www.python.org/downloads/macos/) and install
+with the default options.
+
+### Installing components failed (pip error)
+
+Check your network connection, then run manually in Terminal:
+```bash
+cd /path/to/Auto_job_applier_linkedIn
+bash setup-for-beginners.sh
+```
+
+### Chrome not recognized (safety check fails)
+
+Make sure Google Chrome is installed (not Chromium or another browser) and that
+it's in **Applications**. The default location is `/Applications/Google Chrome.app`.
 
 ### LinkedIn asks for a CAPTCHA
 
