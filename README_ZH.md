@@ -2,6 +2,9 @@
 
 [English](README.md) | [中文说明](README_ZH.md)
 
+> 🍎 **macOS 用户**：针对 macOS 优化的版本（基于 Spotlight 的 Chrome 检测、
+> 专门的 macOS 新手指南）位于 [`mac_branch`](../../tree/mac_branch) 分支。
+
 ![本地网页控制中心界面](docs/beginner_ui_zh.png)
 
 这是一个本地运行的求职申请自动化助手，修改自开源项目 [GodsScion/Auto_job_applier_linkedIn](https://github.com/GodsScion/Auto_job_applier_linkedIn)（基于 AGPLv3 协议开源）。
