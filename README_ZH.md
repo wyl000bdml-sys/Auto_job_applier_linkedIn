@@ -27,10 +27,11 @@
 2. 安装 [Python 3.10+](https://www.python.org/downloads/macos/)，运行 `.pkg` 安装包按默认设置完成即可（macOS 无需手动配置 PATH）。
 3. 下载并解压本仓库代码。
 4. 运行根目录下的启动文件：
-| 系统 | 启动文件 | 操作方式 |
-|------|----------|----------|
-| **macOS** | `START_HERE.command` | 右键 → 打开（首次） |
-| **Windows** | `START_HERE.bat` | 双击运行 |
+
+   | 系统 | 启动文件 | 操作方式 |
+   |------|----------|----------|
+   | **macOS** | `START_HERE.command` | 右键 → 打开（首次） |
+   | **Windows** | `START_HERE.bat` | 双击运行 |
 
 5. 脚本会自动为你创建 Python 虚拟环境（`.venv`），安装必要的依赖包，并自动在浏览器中打开本地配置页面：`http://127.0.0.1:5050`。
 
