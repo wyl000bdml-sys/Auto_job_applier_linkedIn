@@ -1,6 +1,9 @@
-# Local Job Application Assistant (Customized Fork)
+# Local Job Application Assistant — macOS (Customized Fork)
 
 [English](README.md) | [中文说明](README_ZH.md)
+
+> 🍎 **This is the macOS branch (`mac_branch`).** Setup and Chrome detection are
+> tuned for macOS. **Windows users:** switch to the [`main`](../../tree/main) branch.
 
 ![Local Control Center Web UI](docs/beginner_ui_en.png)
 
@@ -14,7 +17,7 @@ This fork introduces several advanced features tailored for research/academic jo
 2. **AI-Powered Suitability Evaluator ("Brain Upgrade"):** Integrates with Google Gemini API to analyze job descriptions against your uploaded **Word format master resume (`resume.docx`)** (or optionally a custom structured project experience inventory file `career_project_inventory.md` if present in the root folder). The bot calculates an alignment score (0-100) and decides to skip jobs that fall below a suitability threshold (<50), reducing account ban risks and ensuring higher application quality.
 3. **Tailored Textarea Answers:** Automatically generates customized summaries matching the job description and injects them into application essay questions (e.g., summaries, cover letters).
 4. **Persistent Skip Memory:** Checks both applied and failed/skipped history files during initialization to avoid repeating or re-opening job listings that were previously processed.
-5. **Self-Healing Version Matcher:** Automatically detects the installed Google Chrome version on Windows and matches the ChromeDriver major version at run time to prevent browser version mismatch crashes.
+5. **Cross-Platform Chrome Auto-Detection:** Reliably locates Google Chrome on macOS (via Spotlight), Windows (via the registry), and Linux — even when Chrome is installed outside the default location or run straight from `~/Downloads` instead of `/Applications` — and matches the ChromeDriver version at run time to prevent version-mismatch crashes.
 
 ## Start here
 
@@ -22,16 +25,18 @@ This fork introduces several advanced features tailored for research/academic jo
 2. Install [Python 3.10+](https://www.python.org/downloads/) and select
    **Add Python to PATH**.
 3. Download and extract this repository.
-4. Double-click:
+4. Launch:
 
-```text
-START_HERE.bat
-```
+| OS | File to run | How |
+|----|-----------|---------|
+| **macOS** | `START_HERE.command` | Right-click → Open (first time only) |
+| **Windows** | `START_HERE.bat` | Double-click |
 
 The script installs required components when needed and opens a private local
 page at <http://127.0.0.1:5050>.
 
-See the Chinese beginner guide: [QUICKSTART.md](QUICKSTART.md).
+- macOS guide: [QUICKSTART_MAC.md](QUICKSTART_MAC.md)
+- Windows guide: [QUICKSTART.md](QUICKSTART.md)
 
 ## What the user provides
 
@@ -64,12 +69,12 @@ Review every field and never leave it unattended.
 ## Architecture
 
 ```text
-START_HERE.bat
-  -> setup-for-beginners.ps1
-  -> beginner_app.py (127.0.0.1 only)
-  -> user_data/profile.json + uploaded resume
-  -> safety preflight
-  -> runAiBot.py
+Windows: START_HERE.bat  →  setup-for-beginners.ps1
+macOS:   START_HERE.command  →  setup-for-beginners.sh
+  both  →  beginner_app.py (127.0.0.1 only)
+          →  user_data/profile.json + uploaded resume
+          →  safety preflight
+          →  runAiBot.py
 ```
 
 Detailed design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).

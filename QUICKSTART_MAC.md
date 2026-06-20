@@ -1,19 +1,22 @@
-# 新手快速开始（Windows）
+# 新手快速开始（macOS）
 
 这个项目现在提供一个本地控制中心。用户不需要编辑 Python 文件，也不需要
 Codex、ChatGPT 或其他 Agent。
 
-> **macOS 用户**：请参阅 [QUICKSTART_MAC.md](QUICKSTART_MAC.md)。
+> **Windows 用户**：请参阅 [QUICKSTART.md](QUICKSTART.md)。
 
 ## 使用前准备
 
 1. **安装 Google Chrome 浏览器**：
-   - 访问 [Google Chrome 官网](https://www.google.com/chrome/)，点击蓝色 **【下载 Chrome】** 按钮进行安装。
+   - 访问 [Google Chrome 官网](https://www.google.com/chrome/)，点击 **【Download Chrome】** 按钮下载并安装。
 2. **安装 Python 3.10 或更新版本**：
-   - 访问 [Python 官网下载页面](https://www.python.org/downloads/windows/)，下载适用于 Windows 的 Python 安装程序。
-   - 运行安装程序时，**务必在弹出的安装界面最下方勾选 "Add python.exe to PATH"**（将 Python 添加到系统环境变量），然后再点击顶部的 **【Install Now】**。
-   
-   ![安装 Python 勾选 Add to PATH](docs/python_download_page.png)
+   - 访问 [Python 官网下载页面](https://www.python.org/downloads/macos/)，下载最新的 macOS 安装包（`.pkg` 格式）。
+   - 双击 `.pkg` 文件，按默认设置点击继续完成安装。安装完成后，Python 会自动配置好，**无需手动设置环境变量**。
+
+   > **验证安装**：打开"终端"（Terminal），输入以下命令回车，如显示版本号则安装成功：
+   > ```bash
+   > python3 --version
+   > ```
 
 3. **一份准备好的 PDF 简历**。
 
@@ -25,16 +28,24 @@ Codex、ChatGPT 或其他 Agent。
    ![GitHub 点击 Download ZIP](docs/github_code_download.png)
    
 2. **解压 ZIP 压缩包**：
-   - 下载完成后，将 ZIP 压缩包解压到一个独立的文件夹中。**注意：绝对不能直接在压缩包中双击运行**。
-3. **双击运行**：
-   ```text
-   START_HERE.bat
-   ```
+   - 下载完成后，双击 ZIP 压缩包将其解压到文件夹中。**注意：绝对不能直接在压缩包中双击运行脚本**，必须先解压。
 
-首次运行会自动创建独立环境并安装组件。安装完成后，浏览器会自动打开本地控制中心：
+3. **启动程序**：
+   - 在 Finder 中，找到解压后的文件夹，**右键点击** `START_HERE.command` → 选择"**打开**"。
+   - 如果弹出"无法打开，因为无法验证开发者"的提示，点击"**打开**"按钮即可（此提示只在首次运行时出现）。
+
+   > **提示**：不要直接双击 `START_HERE.command`，首次运行必须用右键 → 打开，否则 macOS Gatekeeper 会阻止执行。
+
+首次运行会自动在后台完成以下操作：
+- 创建独立的 Python 虚拟环境（`.venv/`）
+- 安装所有必要的组件
+
+安装完成后，浏览器会自动打开本地控制中心：
 ```text
 http://127.0.0.1:5050
 ```
+
+> **注意**：请保持终端窗口（Terminal）开着，关闭它会停止服务。
 
 ![本地网页控制中心界面](docs/beginner_ui_zh.png)
 
@@ -97,7 +108,7 @@ REVIEW
 
 - 点击本地页面中的"停止"；或者
 - 关闭自动化浏览器窗口；或者
-- 在黑色启动窗口按 `Ctrl+C`
+- 在终端窗口按 `Ctrl+C`
 
 ## 资料保存位置
 
@@ -123,13 +134,35 @@ user_data/
 
 在浏览器手动访问 <http://127.0.0.1:5050>。
 
-### Python was not found
+### "无法打开，因为无法验证开发者"
 
-重新安装 Python，勾选 **Add Python to PATH**，重启电脑后再次双击 `START_HERE.bat`。
+这是 macOS Gatekeeper 的正常提示。操作方法：
+1. **右键点击** `START_HERE.command`
+2. 选择 **"打开"**
+3. 在弹窗中点击 **"打开"** 按钮
 
-### 安装组件失败
+此操作只需进行一次，之后可以直接双击运行。
 
-检查网络、防火墙和 VPN，然后重新运行 `START_HERE.bat`。
+### Python 未找到 / python3 命令不存在
+
+在终端运行：
+```bash
+python3 --version
+```
+如果提示"command not found"，说明 Python 未正确安装。请重新从 [python.org](https://www.python.org/downloads/macos/) 下载安装包并按默认选项安装。
+
+### 安装组件失败（pip 报错）
+
+检查网络连接，然后在终端中手动运行：
+```bash
+cd /path/to/Auto_job_applier_linkedIn
+bash setup-for-beginners.sh
+```
+
+### Chrome 未被识别（安全检查失败）
+
+确认已安装 Google Chrome（而非 Chromium 或其他浏览器）。
+Chrome 默认安装位置应为：`/Applications/Google Chrome.app`。
 
 ### LinkedIn 要求验证码
 
