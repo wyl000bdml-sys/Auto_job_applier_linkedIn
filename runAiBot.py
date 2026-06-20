@@ -69,6 +69,16 @@ pyautogui.FAILSAFE = False
 # if use_resume_generator:    from resume_generator import is_logged_in_GPT, login_GPT, open_resume_chat, create_custom_resume
 
 
+# Load Ph.D. project experience inventory for AI suitability check
+project_inventory = ""
+from pathlib import Path
+inventory_path = Path("yulun_project_experience_inventory.md")
+if inventory_path.is_file():
+    try:
+        project_inventory = inventory_path.read_text(encoding="utf-8")
+    except Exception as e:
+        print_lg(f"Warning: Failed to load project inventory: {e}")
+
 #< Global Variables and logics
 
 if run_in_background == True:
