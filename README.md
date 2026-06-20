@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文说明](README_ZH.md)
 
-![Local Control Center Web UI](docs/beginner_ui.png)
+![Local Control Center Web UI](docs/beginner_ui_en.png)
 
 This is a customized fork of the open-source job application assistant, modified from the original project [GodsScion/Auto_job_applier_linkedIn](https://github.com/GodsScion/Auto_job_applier_linkedIn) (licensed under AGPLv3).
 

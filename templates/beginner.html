@@ -26,7 +26,7 @@
       font: 15px/1.5 "Segoe UI", system-ui, sans-serif;
     }
     .shell { max-width: 1060px; margin: 0 auto; padding: 32px 20px 64px; }
-    header { margin-bottom: 24px; }
+    header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; }
     h1 { margin: 0 0 8px; font-size: 30px; }
     h2 { margin: 0 0 14px; font-size: 20px; }
     p { margin: 6px 0; }
@@ -39,8 +39,8 @@
       margin-bottom: 18px;
       padding: 22px;
     }
-    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .step { border-radius: 10px; background: #eaf0ff; padding: 10px; text-align: center; }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+    .step { border-radius: 10px; background: #eaf0ff; padding: 10px; text-align: center; font-weight: 600; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .full { grid-column: 1 / -1; }
     label { display: block; font-weight: 650; margin-bottom: 5px; }
@@ -85,6 +85,20 @@
     }
     .hidden { display: none; }
     code { background: #eef1f6; border-radius: 4px; padding: 2px 5px; }
+    .lang-btn {
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: normal;
+      border-radius: 6px;
+    }
+    .lang-btn.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+      font-weight: bold;
+    }
     @media (max-width: 760px) {
       .grid, .steps { grid-template-columns: 1fr; }
     }
@@ -93,37 +107,43 @@
 <body>
 <main class="shell">
   <header>
-    <h1>求职申请助手</h1>
-    <p class="muted">只需填写资料、上传简历并选择登录方式。所有资料保存在本机，不需要 Agent。</p>
+    <div>
+      <h1 id="title_header">求职申请助手</h1>
+      <p id="desc_header" class="muted">只需填写资料、上传简历并选择登录方式。所有资料保存在本机，不需要 Agent。</p>
+    </div>
+    <div style="display: flex; gap: 6px;">
+      <button id="lang_zh" class="lang-btn active" onclick="changeLang('zh')">中文说明</button>
+      <button id="lang_en" class="lang-btn" onclick="changeLang('en')">English</button>
+    </div>
   </header>
 
   <div class="steps">
-    <div class="step">1. 填写资料</div>
-    <div class="step">2. 上传简历</div>
-    <div class="step">3. 安全检查</div>
-    <div class="step">4. 人工确认后运行</div>
+    <div class="step" id="step1">1. 填写资料</div>
+    <div class="step" id="step2">2. 上传简历</div>
+    <div class="step" id="step3">3. 安全检查</div>
+    <div class="step" id="step4">4. 人工确认后运行</div>
   </div>
 
   <section class="card">
-    <h2>1. 基本资料</h2>
+    <h2 id="sec1_title">1. 基本资料</h2>
     <div class="grid">
-      <div><label for="first_name">名 *</label><input id="first_name" autocomplete="given-name"></div>
-      <div><label for="last_name">姓 *</label><input id="last_name" autocomplete="family-name"></div>
-      <div><label for="phone_number">电话 *</label><input id="phone_number" autocomplete="tel"></div>
-      <div><label for="current_city">当前城市</label><input id="current_city" autocomplete="address-level2"></div>
-      <div><label for="state">州/省</label><input id="state" autocomplete="address-level1"></div>
-      <div><label for="zipcode">邮编</label><input id="zipcode" autocomplete="postal-code"></div>
-      <div><label for="country">国家 *</label><input id="country" value="United States" autocomplete="country-name"></div>
-      <div><label for="years_of_experience">工作/研究年限</label><input id="years_of_experience" type="number" min="0" value="0"></div>
-      <div><label for="recent_employer">最近的雇主/学校</label><input id="recent_employer" placeholder="University or Company"></div>
-      <div><label for="desired_salary">期望年薪（USD，选填）</label><input id="desired_salary" type="number" min="0" value="0"></div>
-      <div><label for="notice_period">可入职等待天数</label><input id="notice_period" type="number" min="0" value="0"></div>
+      <div><label for="first_name" id="lbl_first_name">名 *</label><input id="first_name" autocomplete="given-name"></div>
+      <div><label for="last_name" id="lbl_last_name">姓 *</label><input id="last_name" autocomplete="family-name"></div>
+      <div><label for="phone_number" id="lbl_phone_number">电话 *</label><input id="phone_number" autocomplete="tel"></div>
+      <div><label for="current_city" id="lbl_current_city">当前城市</label><input id="current_city" autocomplete="address-level2"></div>
+      <div><label for="state" id="lbl_state">州/省</label><input id="state" autocomplete="address-level1"></div>
+      <div><label for="zipcode" id="lbl_zipcode">邮编</label><input id="zipcode" autocomplete="postal-code"></div>
+      <div><label for="country" id="lbl_country">国家 *</label><input id="country" value="United States" autocomplete="country-name"></div>
+      <div><label for="years_of_experience" id="lbl_years_of_experience">工作/研究年限</label><input id="years_of_experience" type="number" min="0" value="0"></div>
+      <div><label for="recent_employer" id="lbl_recent_employer">最近的雇主/学校</label><input id="recent_employer" placeholder="University or Company"></div>
+      <div><label for="desired_salary" id="lbl_desired_salary">期望年薪（USD，选填）</label><input id="desired_salary" type="number" min="0" value="0"></div>
+      <div><label for="notice_period" id="lbl_notice_period">可入职等待天数</label><input id="notice_period" type="number" min="0" value="0"></div>
       <div>
-        <label for="require_visa">现在或未来需要签证支持？</label>
+        <label for="require_visa" id="lbl_require_visa">现在或未来需要签证支持？</label>
         <select id="require_visa"><option>Yes</option><option>No</option></select>
       </div>
       <div>
-        <label for="us_citizenship">工作授权状态</label>
+        <label for="us_citizenship" id="lbl_us_citizenship">工作授权状态</label>
         <select id="us_citizenship">
           <option>Non-citizen seeking work authorization</option>
           <option>Non-citizen allowed to work for any employer</option>
@@ -133,139 +153,311 @@
           <option>Other</option>
         </select>
       </div>
-      <div class="full"><label for="linkedin">LinkedIn URL</label><input id="linkedin" type="url"></div>
-      <div class="full"><label for="website">个人网站 / GitHub</label><input id="website" type="url"></div>
+      <div class="full"><label for="linkedin" id="lbl_linkedin">LinkedIn URL</label><input id="linkedin" type="url"></div>
+      <div class="full"><label for="website" id="lbl_website">个人网站 / GitHub</label><input id="website" type="url"></div>
     </div>
   </section>
 
   <section class="card">
-    <h2>2. 求职目标</h2>
+    <h2 id="sec2_title">2. 求职目标</h2>
     <div class="grid">
       <div class="full">
-        <label for="search_terms">目标岗位 *（每行一个）</label>
+        <label for="search_terms" id="lbl_search_terms">目标岗位 *（每行一个）</label>
         <textarea id="search_terms" placeholder="Simulation Engineer&#10;Scientific Machine Learning Intern"></textarea>
       </div>
-      <div><label for="search_location">搜索地点 *</label><input id="search_location" value="United States"></div>
+      <div><label for="search_location" id="lbl_search_location">搜索地点 *</label><input id="search_location" value="United States"></div>
       <div>
-        <label for="date_posted">发布时间</label>
+        <label for="date_posted" id="lbl_date_posted">发布时间</label>
         <select id="date_posted">
           <option>Past 24 hours</option><option selected>Past week</option>
           <option>Past month</option><option>Any time</option>
         </select>
       </div>
       <div>
-        <label>机会类型 (可多选)</label>
+        <label id="lbl_experience_level">机会类型 (可多选)</label>
         <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="experience_level" value="Internship" checked style="width: auto;"> Internship (实习)
+            <input type="checkbox" name="experience_level" value="Internship" checked style="width: auto;"> <span class="exp-label-raw">Internship</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="experience_level" value="Entry level" checked style="width: auto;"> Entry level (初级)
+            <input type="checkbox" name="experience_level" value="Entry level" checked style="width: auto;"> <span class="exp-label-raw">Entry level</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="experience_level" value="Associate" checked style="width: auto;"> Associate (助理)
+            <input type="checkbox" name="experience_level" value="Associate" checked style="width: auto;"> <span class="exp-label-raw">Associate</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="experience_level" value="Mid-Senior level" checked style="width: auto;"> Mid-Senior level (中高级)
+            <input type="checkbox" name="experience_level" value="Mid-Senior level" checked style="width: auto;"> <span class="exp-label-raw">Mid-Senior level</span>
           </label>
         </div>
       </div>
       <div>
-        <label>岗位形式 (可多选)</label>
+        <label id="lbl_job_type">岗位形式 (可多选)</label>
         <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="job_type" value="Full-time" checked style="width: auto;"> Full-time (全职)
+            <input type="checkbox" name="job_type" value="Full-time" checked style="width: auto;"> <span class="jt-label-raw">Full-time</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="job_type" value="Internship" checked style="width: auto;"> Internship (实习)
+            <input type="checkbox" name="job_type" value="Internship" checked style="width: auto;"> <span class="jt-label-raw">Internship</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="job_type" value="Contract" checked style="width: auto;"> Contract (合同工)
+            <input type="checkbox" name="job_type" value="Contract" checked style="width: auto;"> <span class="jt-label-raw">Contract</span>
           </label>
           <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-            <input type="checkbox" name="job_type" value="Part-time" checked style="width: auto;"> Part-time (兼职)
+            <input type="checkbox" name="job_type" value="Part-time" checked style="width: auto;"> <span class="jt-label-raw">Part-time</span>
           </label>
         </div>
       </div>
       <div>
-        <label for="did_masters">是否已获得或正在攻读硕士/博士？</label>
+        <label for="did_masters" id="lbl_did_masters">是否已获得或正在攻读硕士/博士？</label>
         <select id="did_masters"><option value="true">是</option><option value="false">否</option></select>
       </div>
     </div>
-    <div class="actions"><button class="primary" onclick="saveProfile()">保存资料</button></div>
+    <div class="actions"><button class="primary" onclick="saveProfile()" id="btn_save">保存资料</button></div>
     <div id="saveMessage"></div>
   </section>
 
   <section class="card">
-    <h2>3. 上传 PDF 简历</h2>
-    <p class="muted" style="margin-bottom: 12px;">（用于固定简历投递模式。当不启用 AI 简历定制时，机器人直接使用该 PDF 文件进行申请。）</p>
+    <h2 id="sec3_title">3. 上传 PDF 简历</h2>
+    <p class="muted" style="margin-bottom: 12px;" id="sec3_desc">（用于固定简历投递模式。当不启用 AI 简历定制时，机器人直接使用该 PDF 文件进行申请。）</p>
     <input id="resume" type="file" accept=".pdf,application/pdf">
-    <div class="actions"><button class="secondary" onclick="uploadResume()">上传 PDF 简历</button></div>
+    <div class="actions"><button class="secondary" onclick="uploadResume()" id="btn_upload_pdf">上传 PDF 简历</button></div>
     <div id="resumeMessage"></div>
   </section>
 
   <section class="card">
-    <h2>4. 简历定制与投递选项</h2>
-    <p class="muted" style="margin-bottom: 15px;">（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）</p>
+    <h2 id="sec4_title">4. 简历定制与投递选项</h2>
+    <p class="muted" style="margin-bottom: 15px;" id="sec4_desc">（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）</p>
     <div class="check">
       <input type="checkbox" id="use_AI_resume_tailoring" style="width: auto;" onchange="toggleDocxCard()">
-      <label for="use_AI_resume_tailoring" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）</label>
+      <label for="use_AI_resume_tailoring" style="display: inline; margin-bottom: 0; font-weight: normal;" id="lbl_use_AI"><strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）</label>
     </div>
 
     <div id="docxResumeCard" class="hidden" style="margin: 10px 0 15px 24px; padding: 14px; background: #f8fafc; border: 1px solid var(--line); border-radius: 8px;">
-      <label style="font-weight: 600; margin-bottom: 6px;">上传 Word 格式母版简历 (.docx)</label>
-      <p class="muted" style="font-size: 13px; margin: 4px 0 10px; line-height: 1.4;">
+      <label style="font-weight: 600; margin-bottom: 6px;" id="sec31_title">上传 Word 格式母版简历 (.docx)</label>
+      <p class="muted" style="font-size: 13px; margin: 4px 0 10px; line-height: 1.4;" id="sec31_desc">
         <strong>母版包含内容说明：</strong> 请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。
         AI 将在此基础上匹配岗位的职位描述（JD），智能优化重写“个人总结(Summary)”与“项目经历描述(Experience Bullets)”以完美符合岗位要求，同时 100% 保持您原简历的精美排版和字体。固定信息如姓名、联系方式、教育背景和项目时间保持不变。
       </p>
       <div style="display: flex; gap: 10px; align-items: center;">
         <input id="resume_docx" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="flex: 1; padding: 6px 10px; font-size: 14px;">
-        <button class="secondary" onclick="uploadDocxResume()" style="padding: 8px 14px; font-size: 14px; white-space: nowrap;">上传母版</button>
+        <button class="secondary" onclick="uploadDocxResume()" style="padding: 8px 14px; font-size: 14px; white-space: nowrap;" id="btn_upload_docx">上传母版</button>
       </div>
       <div id="docxMessage" style="margin-top: 8px;"></div>
     </div>
 
     <div style="margin-top: 12px;" class="check">
       <input type="checkbox" id="shortlist_only" style="width: auto;">
-      <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）</label>
+      <label for="shortlist_only" style="display: inline; margin-bottom: 0; font-weight: normal;" id="lbl_shortlist"><strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）</label>
     </div>
     <div style="margin-top: 12px;" class="check">
       <input type="checkbox" id="auto_submit" style="width: auto;">
-      <label for="auto_submit" style="display: inline; margin-bottom: 0; font-weight: normal;"><strong>一键全自动投递 (无感投递模式)</strong>：全自动确认信息并提交申请，中途【不暂停】。如果不勾选此项，投递最后一步会弹窗暂停，方便你人工核对后手动点击提交。</label>
+      <label for="auto_submit" style="display: inline; margin-bottom: 0; font-weight: normal;" id="lbl_auto_submit"><strong>一键全自动投递 (无感投递模式)</strong>：全自动确认信息并提交申请，中途【不暂停】。如果不勾选此项，投递最后一步会弹窗暂停，方便你人工核对后手动点击提交。</label>
     </div>
   </section>
 
   <section class="card">
-    <h2>5. 安全检查</h2>
+    <h2 id="sec5_title">5. 安全检查</h2>
     <div id="checks">正在检查……</div>
-    <div class="safety">
+    <div class="safety" id="sec5_safety">
       <strong>固定安全规则</strong>
       <p>浏览器保持可见；每次提交前暂停；不会后台连续运行；不会自动关注公司。</p>
     </div>
   </section>
 
   <section class="card">
-    <h2>6. 登录并运行</h2>
-    <label for="login_mode">LinkedIn 登录方式</label>
+    <h2 id="sec6_title">6. 登录并运行</h2>
+    <label for="login_mode" id="lbl_login_mode">LinkedIn 登录方式</label>
     <select id="login_mode" onchange="toggleCredentials()">
-      <option value="manual">在打开的浏览器中手动登录（推荐，不保存密码）</option>
-      <option value="credentials">本次运行自动填写账号密码（不会保存）</option>
+      <option value="manual" id="opt_manual">在打开的浏览器中手动登录（推荐，不保存密码）</option>
+      <option value="credentials" id="opt_credentials">本次运行自动填写账号密码（不会保存）</option>
     </select>
     <div id="credentials" class="grid hidden" style="margin-top:14px">
-      <div><label for="username">LinkedIn 邮箱</label><input id="username" autocomplete="username"></div>
-      <div><label for="password">LinkedIn 密码</label><input id="password" type="password" autocomplete="current-password"></div>
+      <div><label for="username" id="lbl_username">LinkedIn 邮箱</label><input id="username" autocomplete="username"></div>
+      <div><label for="password" id="lbl_password">LinkedIn 密码</label><input id="password" type="password" autocomplete="current-password"></div>
     </div>
-    <p class="muted">启动前请输入 <code>REVIEW</code>，表示你会检查每份申请并亲自确认提交。</p>
+    <p class="muted" id="sec6_desc">启动前请输入 <code>REVIEW</code>，表示你会检查每份申请并亲自确认提交。</p>
     <input id="confirmation" placeholder="输入 REVIEW">
     <div class="actions">
-      <button class="primary" onclick="startBot()">启动申请助手</button>
-      <button class="danger" onclick="stopBot()">停止</button>
+      <button class="primary" onclick="startBot()" id="btn_start">启动申请助手</button>
+      <button class="danger" onclick="stopBot()" id="btn_stop">停止</button>
     </div>
     <div id="runMessage"></div>
   </section>
 </main>
 
 <script>
+  let currentLang = localStorage.getItem('lang') || 'zh';
+
+  const TRANSLATIONS = {
+    zh: {
+      title_header: "求职申请助手",
+      desc_header: "只需填写资料、上传简历并选择登录方式。所有资料保存在本机，不需要 Agent。",
+      step1: "1. 填写资料",
+      step2: "2. 上传简历",
+      step3: "3. 安全检查",
+      step4: "4. 人工确认后运行",
+      sec1_title: "1. 基本资料",
+      lbl_first_name: "名 *",
+      lbl_last_name: "姓 *",
+      lbl_phone_number: "电话 *",
+      lbl_current_city: "当前城市",
+      lbl_state: "州/省",
+      lbl_zipcode: "邮编",
+      lbl_country: "国家 *",
+      lbl_years_of_experience: "工作/研究年限",
+      lbl_recent_employer: "最近的雇主/学校",
+      lbl_desired_salary: "期望年薪（USD，选填）",
+      lbl_notice_period: "可入职等待天数",
+      lbl_require_visa: "现在或未来需要签证支持？",
+      lbl_us_citizenship: "工作授权状态",
+      lbl_linkedin: "LinkedIn URL",
+      lbl_website: "个人网站 / GitHub",
+      btn_save: "保存资料",
+      sec2_title: "2. 求职目标",
+      lbl_search_terms: "目标岗位 *（每行一个）",
+      lbl_search_location: "搜索地点 *",
+      lbl_date_posted: "发布时间",
+      lbl_experience_level: "机会类型 (可多选)",
+      lbl_job_type: "岗位形式 (可多选)",
+      lbl_did_masters: "是否已获得或正在攻读硕士/博士？",
+      sec3_title: "3. 上传 PDF 简历",
+      sec3_desc: "（用于固定简历投递模式。当不启用 AI 简历定制时，机器人直接使用该 PDF 文件进行申请。）",
+      btn_upload_pdf: "上传 PDF 简历",
+      sec31_title: "上传 Word 格式母版简历 (.docx)",
+      sec31_desc: "<strong>母版包含内容说明：</strong> 请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。AI 将在此基础上匹配岗位的职位描述（JD），智能优化重写“个人总结(Summary)”与“项目经历描述(Experience Bullets)”以完美符合岗位要求，同时 100% 保持您原简历的精美排版和字体。固定信息如姓名、联系方式、教育背景和项目时间保持不变。",
+      btn_upload_docx: "上传母版",
+      sec4_title: "4. 简历定制与投递选项",
+      sec4_desc: "（默认情况：如果不勾选以下任何选项，机器人将默认使用你上传的固定 PDF 简历进行投递。在提交每一份申请前，机器人都将弹窗暂停，方便你人工检查确认后手动点击提交。）",
+      lbl_use_AI: "<strong>一公司一简历 (AI 自动润色)</strong>：根据每个岗位的具体要求，自动调整并优化你的简历项目经历（需要准备 Word 格式母版简历 <code>user_data/resume/resume.docx</code>）",
+      lbl_shortlist: "<strong>仅收录不投递 (收割整理模式)</strong>：只筛选匹配岗位、自动生成定制简历并保存到表格，【不会】在 LinkedIn 上点击申请（适合你想先批量收集并手动改好简历后，再决定何时投递）",
+      lbl_auto_submit: "<strong>一键全自动投递 (无感投递模式)</strong>：全自动确认信息并提交申请，中途【不暂停】。如果不勾选此项，投递最后一步会弹窗暂停，方便你人工核对后手动点击提交。",
+      sec5_title: "5. 安全检查",
+      sec5_safety: "<strong>固定安全规则</strong><p>浏览器保持可见；每次提交前暂停；不会后台连续运行；不会自动关注公司。</p>",
+      sec6_title: "6. 登录并运行",
+      lbl_login_mode: "LinkedIn 登录方式",
+      lbl_username: "LinkedIn 邮箱",
+      lbl_password: "LinkedIn 密码",
+      sec6_desc: "启动前请输入 <code>REVIEW</code>，表示你会检查每份申请并亲自确认提交。",
+      btn_start: "启动申请助手",
+      btn_stop: "停止"
+    },
+    en: {
+      title_header: "Job Application Assistant",
+      desc_header: "Fill in your profile, upload your resume, and choose a login style. All data is saved locally on your machine.",
+      step1: "1. Profile",
+      step2: "2. Resume",
+      step3: "3. Security Check",
+      step4: "4. Run Bot",
+      sec1_title: "1. Personal Information",
+      lbl_first_name: "First Name *",
+      lbl_last_name: "Last Name *",
+      lbl_phone_number: "Phone *",
+      lbl_current_city: "Current City",
+      lbl_state: "State/Province",
+      lbl_zipcode: "Zip/Postal Code",
+      lbl_country: "Country *",
+      lbl_years_of_experience: "Years of Experience",
+      lbl_recent_employer: "Most Recent Employer/School",
+      lbl_desired_salary: "Desired Annual Salary (USD, optional)",
+      lbl_notice_period: "Notice Period (Days)",
+      lbl_require_visa: "Require Visa Sponsorship now or in the future?",
+      lbl_us_citizenship: "Work Authorization Status",
+      lbl_linkedin: "LinkedIn URL",
+      lbl_website: "Personal Website / GitHub",
+      btn_save: "Save Profile",
+      sec2_title: "2. Job Search Objectives",
+      lbl_search_terms: "Target Job Titles * (one per line)",
+      lbl_search_location: "Search Location *",
+      lbl_date_posted: "Date Posted",
+      lbl_experience_level: "Experience Level (multi-select)",
+      lbl_job_type: "Job Type (multi-select)",
+      lbl_did_masters: "Do you have or are you pursuing a Master's or Ph.D.?",
+      sec3_title: "3. Upload PDF Resume",
+      sec3_desc: "(For static resume submission. When AI resume tailoring is disabled, the bot uses this PDF file to apply.)",
+      btn_upload_pdf: "Upload PDF Resume",
+      sec31_title: "Upload Word Format Master Resume (.docx)",
+      sec31_desc: "<strong>Master CV Content Guide:</strong> Please write your most complete and detailed project experience, skills, and publications in this master resume. AI will match the Job Description (JD) and rewrite the 'Summary' and 'Experience Bullets' to perfectly fit the role, while preserving 100% of the original formatting (styling, layout, fonts, education, dates remain unchanged).",
+      btn_upload_docx: "Upload Master Resume",
+      sec4_title: "4. Resume Tailoring & Submission Options",
+      sec4_desc: "(Default Behavior: If no options are selected, the bot will use your static PDF resume. Before each submission, the bot will pause for manual review.)",
+      lbl_use_AI: "<strong>One Custom Resume Per Company (AI Tailoring)</strong>: Automatically adjust and optimize your experience bullets for each job (requires Word format master resume at <code>user_data/resume/resume.docx</code>)",
+      lbl_shortlist: "<strong>Harvesting Mode (Collect jobs & generate resumes only)</strong>: Collect matched jobs and generate tailored resumes into a spreadsheet, but do not click submit on LinkedIn (ideal for reviewing first before applying)",
+      lbl_auto_submit: "<strong>One-Click Auto-Submit (Silent Submission Mode)</strong>: Automatically complete forms and click submit without pausing. If unchecked, the bot will pause at the final step for your manual review.",
+      sec5_title: "5. Safety Checks",
+      sec5_safety: "<strong>Fixed Safety Rules</strong><p>Browser remains visible; pauses before final submission; no background loops; no auto-following companies.</p>",
+      sec6_title: "6. Login & Start Assistant",
+      lbl_login_mode: "LinkedIn Login Method",
+      lbl_username: "LinkedIn Email",
+      lbl_password: "LinkedIn Password",
+      sec6_desc: "Enter <code>REVIEW</code> to confirm manual review mode.",
+      btn_start: "Start Assistant",
+      btn_stop: "Stop"
+    }
+  };
+
+  const PREFLIGHT_MAP = {
+    "Google Chrome": {zh: "Google Chrome 浏览器", en: "Google Chrome Browser"},
+    "Personal information": {zh: "个人基本资料", en: "Personal Information"},
+    "Target roles and location": {zh: "求职目标岗位与地点", en: "Target Roles & Location"},
+    "PDF resume": {zh: "PDF 简历", en: "PDF Resume"},
+    "Word master resume (.docx)": {zh: "Word 格式母版简历 (.docx)", en: "Word Master Resume (.docx)"},
+    "Manual review safety": {zh: "人工审核安全确认", en: "Manual Review Safety"}
+  };
+
+  const EXP_LABELS = {
+    "Internship": {zh: "Internship (实习)", en: "Internship"},
+    "Entry level": {zh: "Entry level (初级)", en: "Entry level"},
+    "Associate": {zh: "Associate (助理)", en: "Associate"},
+    "Mid-Senior level": {zh: "Mid-Senior level (中高级)", en: "Mid-Senior level"}
+  };
+
+  const JT_LABELS = {
+    "Full-time": {zh: "Full-time (全职)", en: "Full-time"},
+    "Internship": {zh: "Internship (实习)", en: "Internship"},
+    "Contract": {zh: "Contract (合同工)", en: "Contract"},
+    "Part-time": {zh: "Part-time (兼职)", en: "Part-time"}
+  };
+
+  function updateUI() {
+    // Set active language button style
+    document.getElementById('lang_zh').classList.toggle('active', currentLang === 'zh');
+    document.getElementById('lang_en').classList.toggle('active', currentLang === 'en');
+    
+    // Apply translations
+    const dict = TRANSLATIONS[currentLang];
+    for (const key in dict) {
+      const el = document.getElementById(key);
+      if (el) el.innerHTML = dict[key];
+    }
+    
+    // Translate select options dynamically
+    document.getElementById('opt_manual').textContent = currentLang === 'zh' ? '在打开的浏览器中手动登录（推荐，不保存密码）' : 'Manually log in in the opened browser (recommended, no saved password)';
+    document.getElementById('opt_credentials').textContent = currentLang === 'zh' ? '本次运行自动填写账号密码（不会保存）' : 'Autofill credentials for this run (will not be stored)';
+    
+    // Translate checkbox labels
+    document.querySelectorAll('input[name="experience_level"]').forEach(cb => {
+      const val = cb.value;
+      const span = cb.nextElementSibling || cb.parentElement.querySelector('.exp-label-raw');
+      if (span) span.textContent = EXP_LABELS[val] ? EXP_LABELS[val][currentLang] : val;
+    });
+
+    document.querySelectorAll('input[name="job_type"]').forEach(cb => {
+      const val = cb.value;
+      const span = cb.nextElementSibling || cb.parentElement.querySelector('.jt-label-raw');
+      if (span) span.textContent = JT_LABELS[val] ? JT_LABELS[val][currentLang] : val;
+    });
+
+    // Translate placeholders
+    document.getElementById('confirmation').placeholder = currentLang === 'zh' ? '输入 REVIEW' : 'Enter REVIEW';
+  }
+
+  function changeLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    updateUI();
+    refreshChecks();
+  }
+
   const value = id => document.getElementById(id).value.trim();
   const selected = id => [...document.getElementById(id).selectedOptions].map(x => x.value);
   const message = (id, text, type='ok') => {
@@ -306,6 +498,8 @@
     document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
     document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
     document.getElementById('auto_submit').checked = !(q.pause_before_submit ?? true);
+    
+    updateUI();
     toggleDocxCard();
     refreshChecks();
   }
@@ -344,37 +538,44 @@
       method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload())
     });
     const data = await response.json();
-    message('saveMessage', response.ok ? '资料已安全保存到本机。' : (data.error || '保存失败'), response.ok ? 'ok' : 'error');
+    const successMsg = currentLang === 'zh' ? '资料已安全保存到本机。' : 'Profile saved successfully locally.';
+    const failMsg = currentLang === 'zh' ? (data.error || '保存失败') : (data.error || 'Failed to save');
+    message('saveMessage', response.ok ? successMsg : failMsg, response.ok ? 'ok' : 'error');
     renderChecks(data);
   }
 
   async function uploadResume() {
     const file = document.getElementById('resume').files[0];
-    if (!file) return message('resumeMessage', '请先选择 PDF 文件。', 'warn');
+    const errMsg = currentLang === 'zh' ? '请先选择 PDF 文件。' : 'Please select a PDF file first.';
+    if (!file) return message('resumeMessage', errMsg, 'warn');
     const body = new FormData(); body.append('resume', file);
     const response = await fetch('/api/resume', {method:'POST', body});
     const data = await response.json();
-    message('resumeMessage', response.ok ? `已上传：${data.filename}` : data.error, response.ok ? 'ok' : 'error');
+    const okMsg = currentLang === 'zh' ? `已上传：${data.filename}` : `Uploaded: ${data.filename}`;
+    message('resumeMessage', response.ok ? okMsg : data.error, response.ok ? 'ok' : 'error');
     renderChecks(data);
   }
 
   async function uploadDocxResume() {
     const file = document.getElementById('resume_docx').files[0];
-    if (!file) return message('docxMessage', '请先选择 Word (.docx) 文件。', 'warn');
+    const errMsg = currentLang === 'zh' ? '请先选择 Word (.docx) 文件。' : 'Please select a Word (.docx) file first.';
+    if (!file) return message('docxMessage', errMsg, 'warn');
     const body = new FormData(); body.append('resume_docx', file);
     const response = await fetch('/api/resume_docx', {method:'POST', body});
     const data = await response.json();
-    message('docxMessage', response.ok ? `已上传：${data.filename}` : data.error, response.ok ? 'ok' : 'error');
+    const okMsg = currentLang === 'zh' ? `已上传：${data.filename}` : `Uploaded: ${data.filename}`;
+    message('docxMessage', response.ok ? okMsg : data.error, response.ok ? 'ok' : 'error');
     renderChecks(data);
   }
 
   function renderChecks(data) {
     if (!data || !data.checks) return refreshChecks();
-    document.getElementById('checks').innerHTML = data.checks.map(c =>
-      `<div class="check"><span class="dot ${c.ok ? 'ok':'bad'}"></span>${c.name}</div>`
-    ).join('') + (data.issues?.length
+    document.getElementById('checks').innerHTML = data.checks.map(c => {
+      const name = PREFLIGHT_MAP[c.name] ? PREFLIGHT_MAP[c.name][currentLang] : c.name;
+      return `<div class="check"><span class="dot ${c.ok ? 'ok':'bad'}"></span>${name}</div>`;
+    }).join('') + (data.issues?.length
       ? `<div class="notice error">${data.issues.map(x => x.message).join('<br>')}</div>`
-      : `<div class="notice ok">准备完成，可以启动。</div>`);
+      : `<div class="notice ok">${currentLang === 'zh' ? '准备完成，可以启动。' : 'Ready to start.'}</div>`);
   }
 
   async function refreshChecks() {
@@ -404,7 +605,9 @@
   async function stopBot() {
     const response = await fetch('/api/stop', {method:'POST'});
     const data = await response.json();
-    message('runMessage', data.message || (data.stopped ? '已停止。' : '当前没有运行。'), data.stopped ? 'ok' : 'warn');
+    const stoppedMsg = currentLang === 'zh' ? '已停止。' : 'Stopped.';
+    const notRunningMsg = currentLang === 'zh' ? '当前没有运行。' : 'The assistant is not running.';
+    message('runMessage', data.message || (data.stopped ? stoppedMsg : notRunningMsg), data.stopped ? 'ok' : 'warn');
   }
 
   loadProfile();
