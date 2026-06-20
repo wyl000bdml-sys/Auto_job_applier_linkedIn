@@ -11,7 +11,7 @@ Codex、ChatGPT 或其他 Agent。
    - 访问 [Python 官网下载页面](https://www.python.org/downloads/)，下载适用于 Windows 的 Python 安装程序。
    - 运行安装程序时，**务必在弹出的安装界面最下方勾选 “Add python.exe to PATH”**（将 Python 添加到系统环境变量），然后再点击顶部的 **【Install Now】**。
    
-   ![安装 Python 勾选 Add to PATH](docs/python_install_screenshot.png)
+   ![安装 Python 勾选 Add to PATH](docs/python_download_page.png)
 
 3. **一份准备好的 PDF 简历**。
 
@@ -20,7 +20,7 @@ Codex、ChatGPT 或其他 Agent。
 1. **下载本仓库代码**：
    - 在本项目的 GitHub 页面中，点击绿色的 **【Code】** 按钮，然后在下拉菜单中点击最下方的 **【Download ZIP】**。
    
-   ![GitHub 点击 Download ZIP](docs/github_download_screenshot.png)
+   ![GitHub 点击 Download ZIP](docs/github_code_download.png)
    
 2. **解压 ZIP 压缩包**：
    - 下载完成后，将 ZIP 压缩包解压到一个独立的文件夹中。**注意：绝对不能直接在压缩包中双击运行**。
