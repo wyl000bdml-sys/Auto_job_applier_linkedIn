@@ -72,8 +72,13 @@ pyautogui.FAILSAFE = False
 # Load Ph.D. project experience inventory for AI suitability check
 project_inventory = ""
 from pathlib import Path
-inventory_path = Path("yulun_project_experience_inventory.md")
-if inventory_path.is_file():
+inventory_path = None
+for p in [Path("career_project_inventory.md"), Path("yulun_project_experience_inventory.md")]:
+    if p.is_file():
+        inventory_path = p
+        break
+
+if inventory_path:
     try:
         project_inventory = inventory_path.read_text(encoding="utf-8")
         print_lg(f"Loaded project experience inventory from {inventory_path}")
