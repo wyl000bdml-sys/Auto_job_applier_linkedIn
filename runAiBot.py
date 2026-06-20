@@ -41,6 +41,15 @@ from config.search import *
 from config.secrets import use_AI, username, password, ai_provider
 from config.settings import *
 
+# The beginner control center passes LinkedIn credentials only to this child
+# process. They are never written to the profile JSON or repository files.
+login_mode = os.environ.get("JOB_AGENT_LOGIN_MODE", "configured").strip().lower()
+if login_mode == "credentials":
+    username = os.environ.get("JOB_AGENT_LINKEDIN_USERNAME", username)
+    password = os.environ.get("JOB_AGENT_LINKEDIN_PASSWORD", password)
+if os.environ.get("JOB_AGENT_DISABLE_AI") == "1":
+    use_AI = False
+
 from modules.open_chrome import *
 from modules.helpers import *
 from modules.clickers_and_finders import *
@@ -125,9 +134,13 @@ def login_LN() -> None:
     '''
     # Find the username and password fields and fill them with user credentials
     driver.get("https://www.linkedin.com/login")
-    if username == "username@example.com" and password == "example_password":
-        pyautogui.alert("User did not configure username and password in secrets.py, hence can't login automatically! Please login manually!", "Login Manually","Okay")
-        print_lg("User did not configure username and password in secrets.py, hence can't login automatically! Please login manually!")
+    manual_login = login_mode == "manual" or (
+        username in {"username@example.com", "manual-login"}
+        and password in {"example_password", "manual-login"}
+    )
+    if manual_login:
+        pyautogui.alert("Please log in to LinkedIn in the browser, then confirm to continue.", "Login Manually","Okay")
+        print_lg("Waiting for the user to complete LinkedIn login manually.")
         manual_login_retry(is_logged_in_LN, 2)
         return
     try:
@@ -166,17 +179,36 @@ def login_LN() -> None:
 
 def get_applied_job_ids() -> set[str]:
     '''
-    Function to get a `set` of applied job's Job IDs
-    * Returns a set of Job IDs from existing applied jobs history csv file
+    Function to get a `set` of all processed job's Job IDs (Applied, Failed, or Skipped)
+    * Returns a combined set of Job IDs from both applied and failed history files.
     '''
     job_ids: set[str] = set()
+    
+    # Read applied jobs
     try:
-        with open(file_name, 'r', encoding='utf-8') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                job_ids.add(row[0])
-    except FileNotFoundError:
-        print_lg(f"The CSV file '{file_name}' does not exist.")
+        if os.path.exists(file_name):
+            with open(file_name, 'r', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                # Skip header if it exists
+                next(reader, None)
+                for row in reader:
+                    if row: job_ids.add(row[0])
+    except Exception as e:
+        print_lg(f"Error reading applied jobs history: {e}")
+
+    # Read failed/skipped jobs (Brain Upgrade: Memory persistence)
+    try:
+        if os.path.exists(failed_file_name):
+            with open(failed_file_name, 'r', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                next(reader, None)
+                for row in reader:
+                    if row: job_ids.add(row[0])
+    except Exception as e:
+        print_lg(f"Error reading failed jobs history: {e}")
+        
+    if job_ids:
+        print_lg(f"Loaded {len(job_ids)} previously processed jobs to avoid repetition.")
     return job_ids
 
 
@@ -683,7 +715,10 @@ def answer_questions(modal: WebElement, questions_list: set, work_location: str,
             answer = ""
             prev_answer = text_area.get_attribute("value")
             if not prev_answer or overwrite_previous_answers:
-                if 'summary' in label: answer = linkedin_summary
+                # BRAIN UPGRADE: Use tailored summary for relevant questions
+                if ('summary' in label or 'cover' in label or 'about' in label) and current_job_summary:
+                    answer = current_job_summary
+                elif 'summary' in label: answer = linkedin_summary
                 elif 'cover' in label: answer = cover_letter
                 if answer == "":
                 ##> ------ Yang Li : MARKYangL - Feature ------
@@ -992,6 +1027,25 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                                 skills = deepseek_extract_skills(aiClient, description)
                             elif ai_provider.lower() == "gemini":
                                 skills = gemini_extract_skills(aiClient, description)
+                                
+                                # BRAIN UPGRADE: Intelligent Suitability Check
+                                match_result = gemini_analyze_suitability(aiClient, description, project_inventory)
+                                if match_result and "score" in match_result:
+                                    score = match_result["score"]
+                                    decision = match_result.get("decision", "Apply")
+                                    rationale = match_result.get("rationale", "")
+                                    global current_job_summary
+                                    current_job_summary = match_result.get("tailored_summary", "")
+                                    
+                                    print_lg(f"AI Suitability Score: {score}/100 | Decision: {decision}")
+                                    print_lg(f"Rationale: {rationale}")
+                                    
+                                    if decision == "Skip" or score < 50:
+                                        print_lg(f"Skipping job due to low AI suitability score ({score}).")
+                                        failed_job(job_id, job_link, resume, date_listed, "Low AI Suitability Score", rationale, "Skipped", screenshot_name)
+                                        rejected_jobs.add(job_id)
+                                        skip_count += 1
+                                        continue
                             else:
                                 skills = "In Development"
                             print_lg(f"Extracted skills using {ai_provider} AI")
@@ -1172,16 +1226,38 @@ chatGPT_tab = False
 linkedIn_tab = False
 
 def main() -> None:
-    pyautogui.alert("Please consider sponsoring this project at:\n\nhttps://github.com/sponsors/GodsScion\n\n", "Support the project", "Okay")
+    # pyautogui.alert("Please consider sponsoring this project at:\n\nhttps://github.com/sponsors/GodsScion\n\n", "Support the project", "Okay")
     total_runs = 1
     try:
-        global linkedIn_tab, tabs_count, useNewResume, aiClient
+        global linkedIn_tab, tabs_count, useNewResume, aiClient, driver, wait, actions
         alert_title = "Error Occurred. Closing Browser!"
         validate_config()
         
         if not os.path.exists(default_resume_path):
             pyautogui.alert(text='Your default resume "{}" is missing! Please update it\'s folder path "default_resume_path" in config.py\n\nOR\n\nAdd a resume with exact name and path (check for spelling mistakes including cases).\n\n\nFor now the bot will continue using your previous upload from LinkedIn!'.format(default_resume_path), title="Missing Resume", button="OK")
             useNewResume = False
+        
+        # Initialize Browser Engine
+        if browser_engine == "playwright":
+            from modules.playwright_engine import (
+                create_playwright_instance,
+                playwright_login_ln,
+            )
+            print_lg("Initializing Playwright Engine...")
+            pw, context, page = create_playwright_instance(headless=run_in_background)
+            if not playwright_login_ln(page, username, password):
+                raise Exception("Playwright Login Failed!")
+            # Note: For now, the rest of the script still expects Selenium 'driver'.
+            # We are in transition. To keep it running, we might need a bridge or 
+            # to start migrating core functions to accept 'page' instead of 'driver'.
+            print_lg("Playwright Bridge: Current script still requires Selenium for many functions. Switching back to Selenium for now while development continues.")
+            # Close playwright for now as the applier logic isn't fully ported
+            context.close()
+            pw.stop()
+            # Selenium 'driver' is already initialized via modules.open_chrome import
+        else:
+            # Selenium 'driver' is already initialized via modules.open_chrome import
+            pass
         
         # Login to LinkedIn
         tabs_count = len(driver.window_handles)

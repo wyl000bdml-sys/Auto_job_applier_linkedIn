@@ -3,6 +3,7 @@ from config.secrets import llm_model, llm_api_key
 from config.settings import showAiErrorAlerts
 from modules.helpers import print_lg, critical_error_log, convert_to_json
 from modules.ai.prompts import *
+from modules.ai.intelligent_matching_prompts import intelligent_match_prompt
 from pyautogui import confirm
 from typing import Literal
 
@@ -158,4 +159,16 @@ def gemini_answer_question(
         return gemini_completion(model, prompt)
     except Exception as e:
         critical_error_log("Error occurred while answering question with Gemini!", e)
+        return {"error": str(e)}
+
+def gemini_analyze_suitability(model, job_description: str, inventory_content: str) -> dict | None:
+    """
+    Analyzes job suitability using the Gemini model.
+    """
+    try:
+        print_lg("Analyzing job suitability using Gemini...")
+        prompt = intelligent_match_prompt.format(inventory_content, job_description)
+        return gemini_completion(model, prompt, is_json=True)
+    except Exception as e:
+        critical_error_log("Error occurred while analyzing suitability with Gemini!", e)
         return {"error": str(e)}
