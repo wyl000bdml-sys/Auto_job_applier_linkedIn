@@ -76,8 +76,31 @@ inventory_path = Path("yulun_project_experience_inventory.md")
 if inventory_path.is_file():
     try:
         project_inventory = inventory_path.read_text(encoding="utf-8")
+        print_lg(f"Loaded project experience inventory from {inventory_path}")
     except Exception as e:
-        print_lg(f"Warning: Failed to load project inventory: {e}")
+        print_lg(f"Warning: Failed to load project inventory from {inventory_path}: {e}")
+
+if not project_inventory:
+    # Fallback to reading the uploaded Word master resume (.docx)
+    master_docx_candidates = [
+        Path("user_data/resume/resume.docx"),
+        Path("resume.docx"),
+        Path("user_data/resume/Yulun_Wu_Resume.docx"),
+    ]
+    master_docx_path = None
+    for c in master_docx_candidates:
+        if c.exists():
+            master_docx_path = c
+            break
+    if master_docx_path:
+        try:
+            from modules.ai.resume_customizer import extract_paragraphs_from_docx
+            paragraphs = extract_paragraphs_from_docx(str(master_docx_path))
+            if paragraphs:
+                project_inventory = "\n".join(paragraphs)
+                print_lg(f"Loaded project inventory fallback from Word master resume: {master_docx_path}")
+        except Exception as e:
+            print_lg(f"Warning: Failed to load project inventory from master resume DOCX: {e}")
 
 #< Global Variables and logics
 
