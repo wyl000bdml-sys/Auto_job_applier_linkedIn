@@ -230,10 +230,51 @@ def build_tailored_docx(tailored_data: dict, output_path: Path):
     doc.save(output_path)
     print_lg(f"Saved custom tailored resume to: {output_path}")
 
-def generate_tailored_resume(job_description: str, job_id: str, company_name: str, model) -> Path | None:
-    """API wrapper to match JD, query Gemini, and compile tailored resume docx."""
-    from modules.ai.geminiConnections import gemini_tailor_resume_bullets
+def ai_tailor_resume_bullets(job_description: str, inventory_content: str, model, provider: str) -> dict | None:
+    """Queries the appropriate AI provider (Gemini, OpenAI, DeepSeek) for tailored resume bullets."""
+    from modules.ai.intelligent_matching_prompts import tailored_resume_bullet_prompt
     
+    provider_lower = provider.lower()
+    
+    if provider_lower == "gemini":
+        from modules.ai.geminiConnections import gemini_completion
+        try:
+            prompt = tailored_resume_bullet_prompt.format(inventory_content, job_description)
+            return gemini_completion(model, prompt, is_json=True)
+        except Exception as e:
+            print(f"Gemini resume tailoring failed: {e}")
+            return None
+            
+    elif provider_lower == "openai":
+        from modules.ai.openaiConnections import ai_completion
+        try:
+            prompt = tailored_resume_bullet_prompt.format(inventory_content, job_description)
+            messages = [{"role": "user", "content": prompt}]
+            return ai_completion(model, messages, response_format={"type": "json_object"})
+        except Exception as e:
+            print(f"OpenAI resume tailoring failed: {e}")
+            return None
+            
+    elif provider_lower == "deepseek":
+        from modules.ai.deepseekConnections import deepseek_completion
+        try:
+            prompt = tailored_resume_bullet_prompt.format(inventory_content, job_description)
+            messages = [{"role": "user", "content": prompt}]
+            return deepseek_completion(model, messages, response_format={"type": "json_object"})
+        except Exception as e:
+            print(f"DeepSeek resume tailoring failed: {e}")
+            return None
+            
+    else:
+        print(f"Unsupported AI provider for resume tailoring: {provider}")
+        return None
+
+def generate_tailored_resume(job_description: str, job_id: str, company_name: str, model, provider: str = None) -> Path | None:
+    """API wrapper to match JD, query the configured AI provider, and compile tailored resume docx."""
+    if not provider:
+        from config.secrets import ai_provider
+        provider = ai_provider
+
     # 1. Resolve Project Inventory Path
     project_inventory_path = os.environ.get("CAREER_PROJECT_INVENTORY", "career_project_inventory.md")
     if not os.path.exists(project_inventory_path) and os.path.exists("yulun_project_experience_inventory.md"):
@@ -246,14 +287,14 @@ def generate_tailored_resume(job_description: str, job_id: str, company_name: st
         critical_error_log(f"Failed to read project inventory file: {project_inventory_path}", e)
         return None
         
-    # 2. Query Gemini for tailored summary and bullets
+    # 2. Query AI for tailored summary and bullets
     try:
-        print_lg(f"Requesting resume bullet tailoring from Gemini for Job ID: {job_id}...")
-        tailored_data = gemini_tailor_resume_bullets(model, job_description, inventory_content)
+        print_lg(f"Requesting resume bullet tailoring from {provider} AI for Job ID: {job_id}...")
+        tailored_data = ai_tailor_resume_bullets(job_description, inventory_content, model, provider)
         if not tailored_data or "error" in tailored_data:
-            raise ValueError(f"Gemini API returned error: {tailored_data}")
+            raise ValueError(f"AI API returned error: {tailored_data}")
     except Exception as e:
-        critical_error_log("Failed to get tailored resume content from Gemini!", e)
+        critical_error_log(f"Failed to get tailored resume content from {provider} AI!", e)
         return None
         
     # 3. Compile and save the tailored DOCX file
