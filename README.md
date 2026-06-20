@@ -1,5 +1,7 @@
 # Local Job Application Assistant (Customized Fork)
 
+[English](README.md) | [中文说明](README_ZH.md)
+
 This is a customized fork of the open-source job application assistant, modified from the original project [GodsScion/Auto_job_applier_linkedIn](https://github.com/GodsScion/Auto_job_applier_linkedIn) (licensed under AGPLv3).
 
 ## Key Customizations & Upgrades
