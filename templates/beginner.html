@@ -178,9 +178,22 @@
 
   <section class="card">
     <h2>3. 上传 PDF 简历</h2>
+    <p class="muted" style="margin-bottom: 12px;">（用于固定简历投递模式。当不启用 AI 简历定制时，机器人直接使用该 PDF 文件进行申请。）</p>
     <input id="resume" type="file" accept=".pdf,application/pdf">
-    <div class="actions"><button class="secondary" onclick="uploadResume()">上传到本机私密目录</button></div>
+    <div class="actions"><button class="secondary" onclick="uploadResume()">上传 PDF 简历</button></div>
     <div id="resumeMessage"></div>
+  </section>
+
+  <section class="card">
+    <h2>3.1 上传 Word 格式母版简历</h2>
+    <p class="muted" style="margin-bottom: 12px;">
+      <strong>母版包含内容说明：</strong> 必须是 <code>.docx</code> 格式。请在此母版简历中写入您<strong>最完整、详实</strong>的项目经历、技术栈与研究成果。
+      AI 将在此基础上匹配您要申请的岗位的职位描述（JD），智能优化重写“个人总结(Summary)”与“项目经历描述(Experience Bullets)”以完美符合岗位要求。
+      同时 100% 保持您原 Word 简历的精美排版和结构。您的姓名、联系方式、教育经历与起止时间等固定信息将保持不变。
+    </p>
+    <input id="resume_docx" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    <div class="actions"><button class="secondary" onclick="uploadDocxResume()">上传 Word 母版简历</button></div>
+    <div id="docxMessage"></div>
   </section>
 
   <section class="card">
@@ -307,6 +320,16 @@
     const response = await fetch('/api/resume', {method:'POST', body});
     const data = await response.json();
     message('resumeMessage', response.ok ? `已上传：${data.filename}` : data.error, response.ok ? 'ok' : 'error');
+    renderChecks(data);
+  }
+
+  async function uploadDocxResume() {
+    const file = document.getElementById('resume_docx').files[0];
+    if (!file) return message('docxMessage', '请先选择 Word (.docx) 文件。', 'warn');
+    const body = new FormData(); body.append('resume_docx', file);
+    const response = await fetch('/api/resume_docx', {method:'POST', body});
+    const data = await response.json();
+    message('docxMessage', response.ok ? `已上传：${data.filename}` : data.error, response.ok ? 'ok' : 'error');
     renderChecks(data);
   }
 

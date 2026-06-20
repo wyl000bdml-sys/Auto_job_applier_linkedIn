@@ -203,6 +203,16 @@ def validate_profile(profile: dict[str, Any] | None = None) -> list[dict[str, st
                 "message": "Upload a PDF resume before starting.",
             }
         )
+    if current.get("settings", {}).get("use_AI_resume_tailoring", False):
+        docx = resume.parent / "resume.docx"
+        if not docx.is_file():
+            issues.append(
+                {
+                    "level": "error",
+                    "field": "docx_resume",
+                    "message": "Upload a Word format master resume (.docx) before starting AI tailoring.",
+                }
+            )
 
 
     if current.get("settings", {}).get("run_in_background", False):

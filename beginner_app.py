@@ -109,6 +109,14 @@ def _preflight() -> dict[str, Any]:
             ),
         },
     ]
+    use_ai_tailor = profile.get("settings", {}).get("use_AI_resume_tailoring", False)
+    if use_ai_tailor:
+        checks.append(
+            {
+                "name": "Word master resume (.docx)",
+                "ok": not any(item["field"] == "docx_resume" for item in issues),
+            }
+        )
     return {"ready": not issues, "checks": checks, "issues": issues}
 
 
@@ -156,6 +164,30 @@ def upload_resume():
     profile = load_profile()
     profile["questions"]["default_resume_path"] = str(destination)
     save_profile(profile)
+    return jsonify({"uploaded": True, "filename": filename, **_preflight()})
+
+
+@app.post("/api/resume_docx")
+def upload_resume_docx():
+    uploaded = request.files.get("resume_docx")
+    if uploaded is None or not uploaded.filename:
+        return jsonify({"error": "Choose a Word (.docx) resume first."}), 400
+    filename = secure_filename(uploaded.filename)
+    if not filename.lower().endswith(".docx"):
+        return jsonify({"error": "Only Word (.docx) resumes are accepted."}), 400
+
+    private_root = Path(
+        os.environ.get("JOB_AGENT_USER_DATA_DIR", str(ROOT / "user_data"))
+    ).expanduser().resolve()
+    destination_dir = private_root / "resume"
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    destination = destination_dir / "resume.docx"
+    uploaded.save(destination)
+    try:
+        os.chmod(destination, 0o600)
+    except OSError:
+        pass
+
     return jsonify({"uploaded": True, "filename": filename, **_preflight()})
 
 
