@@ -35,7 +35,7 @@
 
 5. 脚本会自动为你创建 Python 虚拟环境（`.venv`），安装必要的依赖包，并自动在浏览器中打开本地配置页面：`http://127.0.0.1:5050`。
 
-*macOS 新手指南请参阅 [QUICKSTART_MAC.md](QUICKSTART_MAC.md)。Windows 新手指南请参阅 [QUICKSTART.md](QUICKSTART.md)。*
+*macOS 新手指南请参阅 [QUICKSTART_MAC_ZH.md](QUICKSTART_MAC_ZH.md)。Windows 新手指南请参阅 [QUICKSTART_ZH.md](QUICKSTART_ZH.md)。*
 
 ---
 
