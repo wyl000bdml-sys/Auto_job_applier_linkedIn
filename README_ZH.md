@@ -23,10 +23,10 @@
 
 ## 🛠️ 快速开始
 
-1. 安装 [Google Chrome 浏览器](https://www.google.com/chrome/)。
-2. 安装 [Python 3.10+](https://www.python.org/downloads/)，安装时务必勾选 **Add Python to PATH**（将 Python 添加到系统环境变量）。
+1. 安装 [Google Chrome 浏览器](https://www.google.com/chrome/)，并将其拖入「应用程序」文件夹（不要直接在磁盘镜像里运行）。
+2. 安装 [Python 3.10+](https://www.python.org/downloads/macos/)，运行 `.pkg` 安装包按默认设置完成即可（macOS 无需手动配置 PATH）。
 3. 下载并解压本仓库代码。
-4. 双击运行根目录下的：
+4. 运行根目录下的启动文件：
 | 系统 | 启动文件 | 操作方式 |
 |------|----------|----------|
 | **macOS** | `START_HERE.command` | 右键 → 打开（首次） |
@@ -66,8 +66,8 @@
 ## 📐 系统架构
 
 ```text
-Windows: START_HERE.bat       → setup-for-beginners.ps1
 macOS:   START_HERE.command   → setup-for-beginners.sh
+Windows: START_HERE.bat       → setup-for-beginners.ps1
   两者  → beginner_app.py (本地 Flask 网页 API，仅限 127.0.0.1)
          → user_data/profile.json + 简历文件 (本地非敏感配置)
          → preflight safety checks (安全预飞检查)

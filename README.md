@@ -21,9 +21,10 @@ This fork introduces several advanced features tailored for research/academic jo
 
 ## Start here
 
-1. Install [Google Chrome](https://www.google.com/chrome/).
-2. Install [Python 3.10+](https://www.python.org/downloads/) and select
-   **Add Python to PATH**.
+1. Install [Google Chrome](https://www.google.com/chrome/) and drag it into
+   **Applications** (don't run it straight from the disk image).
+2. Install [Python 3.10+](https://www.python.org/downloads/macos/) — run the
+   `.pkg` installer (no PATH setup is needed on macOS).
 3. Download and extract this repository.
 4. Launch:
 
@@ -69,8 +70,8 @@ Review every field and never leave it unattended.
 ## Architecture
 
 ```text
-Windows: START_HERE.bat  →  setup-for-beginners.ps1
 macOS:   START_HERE.command  →  setup-for-beginners.sh
+Windows: START_HERE.bat  →  setup-for-beginners.ps1
   both  →  beginner_app.py (127.0.0.1 only)
           →  user_data/profile.json + uploaded resume
           →  safety preflight
@@ -94,8 +95,8 @@ Review `git status` before every commit or push.
 
 ## Advanced use
 
-- `python app.py` — application-history dashboard
-- `python tools/preflight_check.py` — command-line safety check
+- `python3 app.py` — application-history dashboard
+- `python3 tools/preflight_check.py` — command-line safety check
 - `runAiBot.py` — legacy direct entry; the local control center is preferred
 - `modules/ai/` — optional advanced integrations, disabled in beginner mode
 - `requirements-optional.txt` — packages for AI, DOCX, and Playwright tools
