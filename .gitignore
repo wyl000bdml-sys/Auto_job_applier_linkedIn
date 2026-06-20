@@ -46,3 +46,4 @@ tools/linkedin_smoke_test.py
 
 # Local dependency and render caches
 .render_deps/
+scratch/

@@ -459,7 +459,7 @@ def get_job_description(
 def upload_resume(modal: WebElement, resume: str) -> tuple[bool, str]:
     try:
         modal.find_element(By.NAME, "file").send_keys(os.path.abspath(resume))
-        return True, os.path.basename(default_resume_path)
+        return True, os.path.basename(resume)
     except: return False, "Previous resume"
 
 # Function to answer common questions for Easy Apply
@@ -952,6 +952,7 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                     date_listed = "Unknown"
                     skills = "Needs an AI" # Still in development
                     resume = "Pending"
+                    active_resume_path = default_resume_path
                     reposted = False
                     questions_list = None
                     screenshot_name = "Not Available"
@@ -1054,6 +1055,20 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                             skills = "Error extracting skills"
                         ##<
 
+                    # Generate tailored resume using Gemini if active
+                    if use_AI and ai_provider.lower() == "gemini" and description != "Unknown":
+                        try:
+                            from modules.ai.resume_customizer import generate_tailored_resume
+                            print_lg(f"Attempting to generate tailored resume for '{company}'...")
+                            tailored_resume = generate_tailored_resume(description, job_id, company, aiClient)
+                            if tailored_resume:
+                                active_resume_path = str(tailored_resume)
+                                print_lg(f"Successfully generated tailored resume: {active_resume_path}")
+                            else:
+                                print_lg("Tailored resume generation returned None. Falling back to default resume.")
+                        except Exception as e:
+                            print_lg(f"Error generating tailored resume: {e}. Falling back to default resume.")
+
                     uploaded = False
                     # Case 1: Easy Apply Button
                     # First try the classic button with "Easy" in aria-label
@@ -1119,7 +1134,8 @@ def apply_to_jobs(search_terms: list[str]) -> None:
                                         errored = "stuck"
                                         raise Exception("Seems like stuck in a continuous loop of next, probably because of new questions.")
                                     questions_list = answer_questions(modal, questions_list, work_location, job_description=description)
-                                    if useNewResume and not uploaded: uploaded, resume = upload_resume(modal, default_resume_path)
+                                    if (active_resume_path != default_resume_path or useNewResume) and not uploaded:
+                                        uploaded, resume = upload_resume(modal, active_resume_path)
                                     try: next_button = modal.find_element(By.XPATH, './/span[normalize-space(.)="Review"]') 
                                     except NoSuchElementException:  next_button = modal.find_element(By.XPATH, './/button[contains(span, "Next")]')
                                     try: next_button.click()
