@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Application Assistant</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --panel: #ffffff;
+      --page: #f4f7fb;
+      --brand: #2457d6;
+      --brand-dark: #193f9e;
+      --ok: #18794e;
+      --warn: #9a6700;
+      --danger: #b42318;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 15px/1.5 "Segoe UI", system-ui, sans-serif;
+    }
+    .shell { max-width: 1060px; margin: 0 auto; padding: 32px 20px 64px; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    p { margin: 6px 0; }
+    .muted { color: var(--muted); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(23, 32, 51, .06);
+      margin-bottom: 18px;
+      padding: 22px;
+    }
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .step { border-radius: 10px; background: #eaf0ff; padding: 10px; text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .full { grid-column: 1 / -1; }
+    label { display: block; font-weight: 650; margin-bottom: 5px; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #b8c1d1;
+      border-radius: 8px;
+      font: inherit;
+      padding: 10px 11px;
+    }
+    textarea { min-height: 86px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--brand);
+      outline: 3px solid rgba(36, 87, 214, .14);
+    }
+    button {
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      padding: 10px 16px;
+    }
+    .primary { background: var(--brand); color: white; }
+    .primary:hover { background: var(--brand-dark); }
+    .secondary { background: #e9edf5; color: var(--ink); }
+    .danger { background: #fee4e2; color: var(--danger); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .notice { border-radius: 9px; margin-top: 12px; padding: 11px 13px; }
+    .notice.ok { background: #e8f7ef; color: var(--ok); }
+    .notice.warn { background: #fff4d6; color: var(--warn); }
+    .notice.error { background: #fee4e2; color: var(--danger); }
+    .check { align-items: center; display: flex; gap: 8px; margin: 7px 0; }
+    .dot { border-radius: 50%; display: inline-block; height: 10px; width: 10px; }
+    .dot.ok { background: var(--ok); }
+    .dot.bad { background: var(--danger); }
+    .safety {
+      background: #fff9e8;
+      border: 1px solid #f0d98a;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .hidden { display: none; }
+    code { background: #eef1f6; border-radius: 4px; padding: 2px 5px; }
+    @media (max-width: 760px) {
+      .grid, .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <h1>求职申请助手</h1>
+    <p class="muted">只需填写资料、上传简历并选择登录方式。所有资料保存在本机，不需要 Agent。</p>
+  </header>
+
+  <div class="steps">
+    <div class="step">1. 填写资料</div>
+    <div class="step">2. 上传简历</div>
+    <div class="step">3. 安全检查</div>
+    <div class="step">4. 人工确认后运行</div>
+  </div>
+
+  <section class="card">
+    <h2>1. 基本资料</h2>
+    <div class="grid">
+      <div><label for="first_name">名 *</label><input id="first_name" autocomplete="given-name"></div>
+      <div><label for="last_name">姓 *</label><input id="last_name" autocomplete="family-name"></div>
+      <div><label for="phone_number">电话 *</label><input id="phone_number" autocomplete="tel"></div>
+      <div><label for="current_city">当前城市</label><input id="current_city" autocomplete="address-level2"></div>
+      <div><label for="state">州/省</label><input id="state" autocomplete="address-level1"></div>
+      <div><label for="zipcode">邮编</label><input id="zipcode" autocomplete="postal-code"></div>
+      <div><label for="country">国家 *</label><input id="country" value="United States" autocomplete="country-name"></div>
+      <div><label for="years_of_experience">工作/研究年限</label><input id="years_of_experience" type="number" min="0" value="0"></div>
+      <div><label for="recent_employer">最近的雇主/学校</label><input id="recent_employer" placeholder="University or Company"></div>
+      <div><label for="desired_salary">期望年薪（USD，选填）</label><input id="desired_salary" type="number" min="0" value="0"></div>
+      <div><label for="notice_period">可入职等待天数</label><input id="notice_period" type="number" min="0" value="0"></div>
+      <div>
+        <label for="require_visa">现在或未来需要签证支持？</label>
+        <select id="require_visa"><option>Yes</option><option>No</option></select>
+      </div>
+      <div>
+        <label for="us_citizenship">工作授权状态</label>
+        <select id="us_citizenship">
+          <option>Non-citizen seeking work authorization</option>
+          <option>Non-citizen allowed to work for any employer</option>
+          <option>Non-citizen allowed to work for current employer</option>
+          <option>U.S. Citizen/Permanent Resident</option>
+          <option>Canadian Citizen/Permanent Resident</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="full"><label for="linkedin">LinkedIn URL</label><input id="linkedin" type="url"></div>
+      <div class="full"><label for="website">个人网站 / GitHub</label><input id="website" type="url"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2. 求职目标</h2>
+    <div class="grid">
+      <div class="full">
+        <label for="search_terms">目标岗位 *（每行一个）</label>
+        <textarea id="search_terms" placeholder="Simulation Engineer&#10;Scientific Machine Learning Intern"></textarea>
+      </div>
+      <div><label for="search_location">搜索地点 *</label><input id="search_location" value="United States"></div>
+      <div>
+        <label for="date_posted">发布时间</label>
+        <select id="date_posted">
+          <option>Past 24 hours</option><option selected>Past week</option>
+          <option>Past month</option><option>Any time</option>
+        </select>
+      </div>
+      <div>
+        <label for="experience_level">机会类型</label>
+        <select id="experience_level" multiple size="4">
+          <option selected>Internship</option><option selected>Entry level</option>
+          <option>Associate</option><option>Mid-Senior level</option>
+        </select>
+      </div>
+      <div>
+        <label for="job_type">岗位形式</label>
+        <select id="job_type" multiple size="4">
+          <option selected>Full-time</option><option selected>Internship</option>
+          <option>Contract</option><option>Part-time</option>
+        </select>
+      </div>
+      <div>
+        <label for="did_masters">是否已获得或正在攻读硕士/博士？</label>
+        <select id="did_masters"><option value="true">是</option><option value="false">否</option></select>
+      </div>
+    </div>
+    <div class="actions"><button class="primary" onclick="saveProfile()">保存资料</button></div>
+    <div id="saveMessage"></div>
+  </section>
+
+  <section class="card">
+    <h2>3. 上传 PDF 简历</h2>
+    <input id="resume" type="file" accept=".pdf,application/pdf">
+    <div class="actions"><button class="secondary" onclick="uploadResume()">上传到本机私密目录</button></div>
+    <div id="resumeMessage"></div>
+  </section>
+
+  <section class="card">
+    <h2>4. 安全检查</h2>
+    <div id="checks">正在检查……</div>
+    <div class="safety">
+      <strong>固定安全规则</strong>
+      <p>浏览器保持可见；每次提交前暂停；不会后台连续运行；不会自动关注公司。</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>5. 登录并运行</h2>
+    <label for="login_mode">LinkedIn 登录方式</label>
+    <select id="login_mode" onchange="toggleCredentials()">
+      <option value="manual">在打开的浏览器中手动登录（推荐，不保存密码）</option>
+      <option value="credentials">本次运行自动填写账号密码（不会保存）</option>
+    </select>
+    <div id="credentials" class="grid hidden" style="margin-top:14px">
+      <div><label for="username">LinkedIn 邮箱</label><input id="username" autocomplete="username"></div>
+      <div><label for="password">LinkedIn 密码</label><input id="password" type="password" autocomplete="current-password"></div>
+    </div>
+    <p class="muted">启动前请输入 <code>REVIEW</code>，表示你会检查每份申请并亲自确认提交。</p>
+    <input id="confirmation" placeholder="输入 REVIEW">
+    <div class="actions">
+      <button class="primary" onclick="startBot()">启动申请助手</button>
+      <button class="danger" onclick="stopBot()">停止</button>
+    </div>
+    <div id="runMessage"></div>
+  </section>
+</main>
+
+<script>
+  const value = id => document.getElementById(id).value.trim();
+  const selected = id => [...document.getElementById(id).selectedOptions].map(x => x.value);
+  const message = (id, text, type='ok') => {
+    document.getElementById(id).innerHTML = text ? `<div class="notice ${type}">${text}</div>` : '';
+  };
+
+  async function loadProfile() {
+    const response = await fetch('/api/profile');
+    const p = await response.json();
+    const a = p.personal, q = p.questions, s = p.search;
+    ['first_name','last_name','phone_number','current_city','state','zipcode','country']
+      .forEach(k => document.getElementById(k).value = a[k] ?? '');
+    document.getElementById('years_of_experience').value = q.years_of_experience ?? '0';
+    document.getElementById('recent_employer').value = q.recent_employer ?? '';
+    document.getElementById('desired_salary').value = q.desired_salary ?? 0;
+    document.getElementById('notice_period').value = q.notice_period ?? 0;
+    document.getElementById('require_visa').value = q.require_visa ?? 'Yes';
+    document.getElementById('us_citizenship').value = q.us_citizenship ?? 'Other';
+    document.getElementById('linkedin').value = q.linkedIn ?? '';
+    document.getElementById('website').value = q.website ?? '';
+    document.getElementById('search_terms').value = (s.search_terms ?? []).join('\n');
+    document.getElementById('search_location').value = s.search_location ?? 'United States';
+    document.getElementById('date_posted').value = s.date_posted ?? 'Past week';
+    [...document.getElementById('experience_level').options].forEach(o => o.selected = (s.experience_level ?? []).includes(o.value));
+    [...document.getElementById('job_type').options].forEach(o => o.selected = (s.job_type ?? []).includes(o.value));
+    document.getElementById('did_masters').value = s.did_masters ? 'true' : 'false';
+    refreshChecks();
+  }
+
+  function payload() {
+    return {
+      personal: {
+        first_name: value('first_name'), last_name: value('last_name'),
+        phone_number: value('phone_number'), current_city: value('current_city'),
+        state: value('state'), zipcode: value('zipcode'), country: value('country')
+      },
+      questions: {
+        years_of_experience: value('years_of_experience'), require_visa: value('require_visa'),
+        us_citizenship: value('us_citizenship'), linkedIn: value('linkedin'),
+        website: value('website'), recent_employer: value('recent_employer'),
+        desired_salary: Number(value('desired_salary') || 0),
+        notice_period: Number(value('notice_period') || 0)
+      },
+      search: {
+        search_terms: value('search_terms').split('\n').map(x => x.trim()).filter(Boolean),
+        search_location: value('search_location'), date_posted: value('date_posted'),
+        experience_level: selected('experience_level'), job_type: selected('job_type'),
+        did_masters: value('did_masters') === 'true'
+      }
+    };
+  }
+
+  async function saveProfile() {
+    const response = await fetch('/api/profile', {
+      method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload())
+    });
+    const data = await response.json();
+    message('saveMessage', response.ok ? '资料已安全保存到本机。' : (data.error || '保存失败'), response.ok ? 'ok' : 'error');
+    renderChecks(data);
+  }
+
+  async function uploadResume() {
+    const file = document.getElementById('resume').files[0];
+    if (!file) return message('resumeMessage', '请先选择 PDF 文件。', 'warn');
+    const body = new FormData(); body.append('resume', file);
+    const response = await fetch('/api/resume', {method:'POST', body});
+    const data = await response.json();
+    message('resumeMessage', response.ok ? `已上传：${data.filename}` : data.error, response.ok ? 'ok' : 'error');
+    renderChecks(data);
+  }
+
+  function renderChecks(data) {
+    if (!data || !data.checks) return refreshChecks();
+    document.getElementById('checks').innerHTML = data.checks.map(c =>
+      `<div class="check"><span class="dot ${c.ok ? 'ok':'bad'}"></span>${c.name}</div>`
+    ).join('') + (data.issues?.length
+      ? `<div class="notice error">${data.issues.map(x => x.message).join('<br>')}</div>`
+      : `<div class="notice ok">准备完成，可以启动。</div>`);
+  }
+
+  async function refreshChecks() {
+    const response = await fetch('/api/preflight');
+    renderChecks(await response.json());
+  }
+
+  function toggleCredentials() {
+    document.getElementById('credentials').classList.toggle('hidden', value('login_mode') !== 'credentials');
+  }
+
+  async function startBot() {
+    await saveProfile();
+    const body = {
+      login_mode: value('login_mode'), username: value('username'),
+      password: document.getElementById('password').value, confirmation: value('confirmation')
+    };
+    const response = await fetch('/api/start', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)
+    });
+    const data = await response.json();
+    document.getElementById('password').value = '';
+    message('runMessage', response.ok ? data.message : data.error, response.ok ? 'ok' : 'error');
+    refreshChecks();
+  }
+
+  async function stopBot() {
+    const response = await fetch('/api/stop', {method:'POST'});
+    const data = await response.json();
+    message('runMessage', data.message || (data.stopped ? '已停止。' : '当前没有运行。'), data.stopped ? 'ok' : 'warn');
+  }
+
+  loadProfile();
+</script>
+</body>
+</html>
