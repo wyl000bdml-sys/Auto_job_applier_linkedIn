@@ -5,17 +5,25 @@ Codex、ChatGPT 或其他 Agent。
 
 ## 使用前准备
 
-- Windows 10 或 Windows 11
-- Google Chrome
-- Python 3.10 或更新版本
-- 一份 PDF 简历
+1. **安装 Google Chrome 浏览器**：
+   - 访问 [Google Chrome 官网](https://www.google.com/chrome/)，点击蓝色 **【下载 Chrome】** 按钮进行安装。
+2. **安装 Python 3.10 或更新版本**：
+   - 访问 [Python 官网下载页面](https://www.python.org/downloads/)，下载适用于 Windows 的 Python 安装程序。
+   - 运行安装程序时，**务必在弹出的安装界面最下方勾选 “Add python.exe to PATH”**（将 Python 添加到系统环境变量），然后再点击顶部的 **【Install Now】**。
+   
+   ![安装 Python 勾选 Add to PATH](docs/python_install_screenshot.png)
 
-安装 Python 时勾选 **Add Python to PATH**。
+3. **一份准备好的 PDF 简历**。
 
 ## 第一次运行与控制台界面
 
-1. 在 GitHub 点击 **Code > Download ZIP**。
-2. 解压 ZIP，不能直接在压缩包中运行。
+1. **下载本仓库代码**：
+   - 在本项目的 GitHub 页面中，点击绿色的 **【Code】** 按钮，然后在下拉菜单中点击最下方的 **【Download ZIP】**。
+   
+   ![GitHub 点击 Download ZIP](docs/github_download_screenshot.png)
+   
+2. **解压 ZIP 压缩包**：
+   - 下载完成后，将 ZIP 压缩包解压到一个独立的文件夹中。**注意：绝对不能直接在压缩包中双击运行**。
 3. 双击运行：
    ```text
    START_HERE.bat
