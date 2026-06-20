@@ -154,18 +154,38 @@
         </select>
       </div>
       <div>
-        <label for="experience_level">机会类型</label>
-        <select id="experience_level" multiple size="4">
-          <option selected>Internship</option><option selected>Entry level</option>
-          <option>Associate</option><option>Mid-Senior level</option>
-        </select>
+        <label>机会类型 (可多选)</label>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="experience_level" value="Internship" checked style="width: auto;"> Internship (实习)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="experience_level" value="Entry level" checked style="width: auto;"> Entry level (初级)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="experience_level" value="Associate" checked style="width: auto;"> Associate (助理)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="experience_level" value="Mid-Senior level" checked style="width: auto;"> Mid-Senior level (中高级)
+          </label>
+        </div>
       </div>
       <div>
-        <label for="job_type">岗位形式</label>
-        <select id="job_type" multiple size="4">
-          <option selected>Full-time</option><option selected>Internship</option>
-          <option>Contract</option><option>Part-time</option>
-        </select>
+        <label>岗位形式 (可多选)</label>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="job_type" value="Full-time" checked style="width: auto;"> Full-time (全职)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="job_type" value="Internship" checked style="width: auto;"> Internship (实习)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="job_type" value="Contract" checked style="width: auto;"> Contract (合同工)
+          </label>
+          <label style="font-weight: normal; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" name="job_type" value="Part-time" checked style="width: auto;"> Part-time (兼职)
+          </label>
+        </div>
       </div>
       <div>
         <label for="did_masters">是否已获得或正在攻读硕士/博士？</label>
@@ -274,8 +294,14 @@
     document.getElementById('search_terms').value = (s.search_terms ?? []).join('\n');
     document.getElementById('search_location').value = s.search_location ?? 'United States';
     document.getElementById('date_posted').value = s.date_posted ?? 'Past week';
-    [...document.getElementById('experience_level').options].forEach(o => o.selected = (s.experience_level ?? []).includes(o.value));
-    [...document.getElementById('job_type').options].forEach(o => o.selected = (s.job_type ?? []).includes(o.value));
+    const expVals = s.experience_level ?? ["Internship", "Entry level", "Associate", "Mid-Senior level"];
+    document.querySelectorAll('input[name="experience_level"]').forEach(cb => {
+      cb.checked = expVals.includes(cb.value);
+    });
+    const jtVals = s.job_type ?? ["Full-time", "Internship", "Contract", "Part-time"];
+    document.querySelectorAll('input[name="job_type"]').forEach(cb => {
+      cb.checked = jtVals.includes(cb.value);
+    });
     document.getElementById('did_masters').value = s.did_masters ? 'true' : 'false';
     document.getElementById('use_AI_resume_tailoring').checked = set.use_AI_resume_tailoring ?? false;
     document.getElementById('shortlist_only').checked = set.shortlist_only ?? false;
@@ -302,7 +328,8 @@
       search: {
         search_terms: value('search_terms').split('\n').map(x => x.trim()).filter(Boolean),
         search_location: value('search_location'), date_posted: value('date_posted'),
-        experience_level: selected('experience_level'), job_type: selected('job_type'),
+        experience_level: [...document.querySelectorAll('input[name="experience_level"]:checked')].map(cb => cb.value),
+        job_type: [...document.querySelectorAll('input[name="job_type"]:checked')].map(cb => cb.value),
         did_masters: value('did_masters') === 'true'
       },
       settings: {
