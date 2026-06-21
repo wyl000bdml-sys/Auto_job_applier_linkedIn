@@ -32,23 +32,53 @@ import os
 import sys
 from pathlib import Path
 
-def get_chrome_major_version() -> int | None:
-    if sys.platform.startswith('win'):
-        chrome_dirs = [
-            Path(os.environ.get("PROGRAMFILES", "C:\\Program Files")) / "Google/Chrome/Application",
-            Path(os.environ.get("PROGRAMFILES(X86)", "C:\\Program Files (x86)")) / "Google/Chrome/Application",
-            Path(os.environ.get("LOCALAPPDATA", "")) / "Google/Chrome/Application",
-        ]
-        version_pattern = re.compile(r'^\d+(\.\d+){3}$')
-        for d in chrome_dirs:
-            if d.is_dir():
-                for sub in d.iterdir():
+def get_chrome_major_version(chrome_path: str | None = None) -> int | None:
+    if not chrome_path:
+        from modules.chrome_detect import find_chrome
+        chrome_path = find_chrome()
+    if not chrome_path:
+        return None
+
+    # 1. Try reading macOS Info.plist (fast, no process execution)
+    if sys.platform == "darwin" and "Google Chrome.app" in chrome_path:
+        try:
+            import plistlib
+            p = Path(chrome_path)
+            # Find Contents/Info.plist
+            plist_path = p.parents[1] / "Info.plist"
+            if plist_path.is_file():
+                with open(plist_path, "rb") as fp:
+                    plist = plistlib.load(fp)
+                    version = plist.get("CFBundleShortVersionString")
+                    if version:
+                        major = version.split(".")[0]
+                        return int(major)
+        except Exception:
+            pass
+
+    # 2. Try directory search for Windows
+    if sys.platform.startswith("win"):
+        try:
+            chrome_dir = Path(chrome_path).parent
+            version_pattern = re.compile(r'^\d+(\.\d+){3}$')
+            if chrome_dir.is_dir():
+                for sub in chrome_dir.iterdir():
                     if sub.is_dir() and version_pattern.match(sub.name):
                         major = sub.name.split('.')[0]
-                        try:
-                            return int(major)
-                        except ValueError:
-                            pass
+                        return int(major)
+        except Exception:
+            pass
+
+    # 3. Fallback: Run the binary with --version
+    try:
+        import subprocess
+        res = subprocess.run([chrome_path, "--version"], capture_output=True, text=True, timeout=3)
+        m = re.search(r'\d+', res.stdout)
+        if m:
+            return int(m.group(0))
+    except Exception:
+        pass
+
     return None
 
 def createChromeSession(isRetry: bool = False):
@@ -67,19 +97,27 @@ def createChromeSession(isRetry: bool = False):
     else:
         print_lg("Logging in with a guest profile, Web history will not be saved!")
         options.add_argument(f"--user-data-dir={get_default_temp_profile()}")
+
+    from modules.chrome_detect import find_chrome
+    chrome_path = find_chrome()
+    if chrome_path:
+        print_lg(f"Using Google Chrome binary at: {chrome_path}")
+        options.binary_location = chrome_path
+
     if stealth_mode:
-        # try: 
-        #     driver = uc.Chrome(driver_executable_path="C:\\Program Files\\Google\\Chrome\\chromedriver-win64\\chromedriver.exe", options=options)
-        # except (FileNotFoundError, PermissionError) as e: 
-        #     print_lg("(Undetected Mode) Got '{}' when using pre-installed ChromeDriver.".format(type(e).__name__)) 
-            print_lg("Downloading Chrome Driver... This may take some time. Undetected mode requires download every run!")
-            major_version = get_chrome_major_version()
-            if major_version:
-                print_lg(f"Detected Chrome major version: {major_version}. Passing version_main={major_version} to undetected_chromedriver.")
-                driver = uc.Chrome(options=options, version_main=major_version)
-            else:
-                driver = uc.Chrome(options=options)
-    else: driver = webdriver.Chrome(options=options) #, service=Service(executable_path="C:\\Program Files\\Google\\Chrome\\chromedriver-win64\\chromedriver.exe"))
+        print_lg("Downloading Chrome Driver... This may take some time. Undetected mode requires download every run!")
+        major_version = get_chrome_major_version(chrome_path)
+        
+        kwargs = {"options": options}
+        if chrome_path:
+            kwargs["browser_executable_path"] = chrome_path
+        if major_version:
+            print_lg(f"Detected Chrome major version: {major_version}. Passing version_main={major_version} to undetected_chromedriver.")
+            kwargs["version_main"] = major_version
+        
+        driver = uc.Chrome(**kwargs)
+    else:
+        driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     wait = WebDriverWait(driver, 5)
     actions = ActionChains(driver)
